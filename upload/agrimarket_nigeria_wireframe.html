@@ -1,0 +1,654 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-background-tertiary)}
+.wf{width:100%;padding:1rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;background:var(--color-background-primary);border-bottom:.5px solid var(--color-border-tertiary);padding:10px 20px;position:sticky;top:0;z-index:100}
+.logo{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.logo span{color:#1D9E75}
+.nav-pills{display:flex;gap:4px;flex-wrap:wrap}
+.nav-pill{font-size:12px;padding:5px 12px;border-radius:var(--border-radius-md);cursor:pointer;border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);transition:all .15s}
+.nav-pill.active,.nav-pill:hover{background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5}
+.screen{display:none;padding:1.5rem 20px}
+.screen.active{display:block}
+.screen-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem}
+.card+.card{margin-top:12px}
+.card-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.875rem 1rem}
+.stat-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.field{margin-bottom:12px}
+.field label{font-size:12px;color:var(--color-text-secondary);display:block;margin-bottom:4px}
+.field .fbox{background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 12px;font-size:13px;color:var(--color-text-tertiary);width:100%}
+.badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
+.badge-green{background:#E1F5EE;color:#0F6E56}
+.badge-amber{background:#FAEEDA;color:#854F0B}
+.badge-red{background:#FCEBEB;color:#A32D2D}
+.badge-blue{background:#E6F1FB;color:#185FA5}
+.badge-gray{background:#F1EFE8;color:#5F5E5A}
+.btn{font-size:13px;padding:7px 16px;border-radius:var(--border-radius-md);cursor:pointer;border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)}
+.btn-primary{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.btn-sm{font-size:12px;padding:4px 10px}
+.divider{border:none;border-top:.5px solid var(--color-border-tertiary);margin:14px 0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.row:last-child{margin-bottom:0}
+.tag{font-size:11px;background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:2px 8px;color:var(--color-text-secondary)}
+.section-head{font-size:13px;font-weight:500;color:var(--color-text-secondary);margin:1.25rem 0 .75rem;display:flex;align-items:center;gap:6px}
+.product-img{width:52px;height:52px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.step-num{width:26px;height:26px;border-radius:50%;background:#1D9E75;color:#fff;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-content{flex:1}
+.step-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.step-desc{font-size:12px;color:var(--color-text-secondary)}
+.table-row{display:flex;gap:12px;font-size:12px;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);align-items:center}
+.table-row:last-child{border-bottom:none}
+.table-head{font-size:11px;color:var(--color-text-tertiary);font-weight:500;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);display:flex;gap:12px}
+.c1{flex:2;min-width:0}
+.c2{flex:1;min-width:60px}
+.c3{flex:1;min-width:60px}
+.c4{flex:1;min-width:60px}
+.sidebar-layout{display:grid;grid-template-columns:200px 1fr;gap:12px}
+.sidebar{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;height:fit-content}
+.sidebar-item{font-size:13px;padding:7px 10px;border-radius:var(--border-radius-md);display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--color-text-secondary);margin-bottom:2px}
+.sidebar-item.active{background:#E1F5EE;color:#0F6E56}
+.code-box{background:#E1F5EE;border:.5px solid #5DCAA5;border-radius:var(--border-radius-md);padding:12px 16px;text-align:center;font-size:20px;font-weight:500;letter-spacing:.25em;color:#0F6E56;margin:12px 0}
+.radio-opt{display:flex;align-items:center;gap:10px;border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px;cursor:pointer}
+.radio-dot{width:16px;height:16px;border-radius:50%;border:.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.radio-dot.sel{border-color:#1D9E75;background:#1D9E75}
+.radio-dot.sel::after{content:'';width:6px;height:6px;background:#fff;border-radius:50%}
+@media(max-width:600px){.sidebar-layout{grid-template-columns:1fr}}
+</style>
+
+<h2 class="sr-only">AgriMarket Nigeria — Interactive wireframe with screens for marketplace, seller dashboard, checkout, admin, and logistics</h2>
+
+<div class="wf">
+  <div class="topbar">
+    <div class="logo"><span>Agri</span>Market <span style="font-size:11px;font-weight:400;margin-left:6px;color:var(--color-text-tertiary)">Nigeria</span></div>
+    <div class="nav-pills">
+      <div class="nav-pill active" onclick="show('home')">Marketplace</div>
+      <div class="nav-pill" onclick="show('product')">Product Detail</div>
+      <div class="nav-pill" onclick="show('cart')">Cart & Checkout</div>
+      <div class="nav-pill" onclick="show('seller')">Seller Dashboard</div>
+      <div class="nav-pill" onclick="show('admin')">Super Admin</div>
+      <div class="nav-pill" onclick="show('logistics')">Logistics</div>
+      <div class="nav-pill" onclick="show('register')">Registration</div>
+    </div>
+  </div>
+
+  <!-- MARKETPLACE HOME -->
+  <div class="screen active" id="s-home">
+    <div class="screen-label">Screen 1 — Marketplace / Homepage</div>
+    <div class="card" style="background:linear-gradient(0deg,#E1F5EE,#E1F5EE);border-color:#5DCAA5;padding:2rem">
+      <div style="font-size:22px;font-weight:500;color:#085041;margin-bottom:8px">Nigeria's leading bulk agricultural marketplace</div>
+      <div style="font-size:14px;color:#0F6E56;margin-bottom:1.25rem">Buy directly from farmers and aggregators · Weight-based quantities · Secure delivery</div>
+      <div style="display:flex;gap:8px;max-width:520px">
+        <div class="fbox" style="flex:1;background:#fff">Search products, sellers…</div>
+        <button class="btn btn-primary">Search</button>
+      </div>
+    </div>
+
+    <div class="section-head"><i class="ti ti-apps" aria-hidden="true"></i> Browse by category</div>
+    <div class="grid4">
+      <div class="card" style="text-align:center;padding:1rem;cursor:pointer">
+        <i class="ti ti-plant" style="font-size:28px;color:#1D9E75" aria-hidden="true"></i>
+        <div style="font-size:13px;margin-top:6px">Grains & Cereals</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1rem;cursor:pointer">
+        <i class="ti ti-leaf" style="font-size:28px;color:#1D9E75" aria-hidden="true"></i>
+        <div style="font-size:13px;margin-top:6px">Vegetables</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1rem;cursor:pointer">
+        <i class="ti ti-apple" style="font-size:28px;color:#1D9E75" aria-hidden="true"></i>
+        <div style="font-size:13px;margin-top:6px">Fruits</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1rem;cursor:pointer">
+        <i class="ti ti-fish" style="font-size:28px;color:#1D9E75" aria-hidden="true"></i>
+        <div style="font-size:13px;margin-top:6px">Livestock</div>
+      </div>
+    </div>
+
+    <div class="section-head"><i class="ti ti-trending-up" aria-hidden="true"></i> Featured listings</div>
+    <div class="grid3">
+      <div class="card" style="cursor:pointer" onclick="show('product')">
+        <div style="height:100px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:12px;display:flex;align-items:center;justify-content:center"><i class="ti ti-plant-2" style="font-size:32px;color:#1D9E75" aria-hidden="true"></i></div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:4px">Premium Wheat</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Seller A · Kano, Nigeria</div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><span style="font-size:15px;font-weight:500;color:#0F6E56">₦450</span><span style="font-size:11px;color:var(--color-text-secondary)">/kg</span></div>
+          <span class="badge badge-green">Min 50 kg</span>
+        </div>
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-top:6px">Available: 100 kg</div>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="show('product')">
+        <div style="height:100px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:12px;display:flex;align-items:center;justify-content:center"><i class="ti ti-grain" style="font-size:32px;color:#1D9E75" aria-hidden="true"></i></div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:4px">Yellow Corn</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Seller B · Lagos, Nigeria</div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><span style="font-size:15px;font-weight:500;color:#0F6E56">₦320</span><span style="font-size:11px;color:var(--color-text-secondary)">/kg</span></div>
+          <span class="badge badge-green">Min 100 kg</span>
+        </div>
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-top:6px">Available: 400 kg</div>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="show('product')">
+        <div style="height:100px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:12px;display:flex;align-items:center;justify-content:center"><i class="ti ti-plant" style="font-size:32px;color:#1D9E75" aria-hidden="true"></i></div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:4px">Premium Barley</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Seller B · Lagos, Nigeria</div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><span style="font-size:15px;font-weight:500;color:#0F6E56">₦280</span><span style="font-size:11px;color:var(--color-text-secondary)">/kg</span></div>
+          <span class="badge badge-green">Min 200 kg</span>
+        </div>
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-top:6px">Available: 800 kg</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT DETAIL -->
+  <div class="screen" id="s-product">
+    <div class="screen-label">Screen 2 — Product Detail Page</div>
+    <div class="grid2">
+      <div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="height:220px;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center">
+            <i class="ti ti-plant-2" style="font-size:64px;color:#1D9E75" aria-hidden="true"></i>
+          </div>
+          <div style="padding:1rem;display:flex;gap:8px">
+            <div style="width:52px;height:52px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary)"></div>
+            <div style="width:52px;height:52px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary)"></div>
+            <div style="width:52px;height:52px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary)"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div style="font-size:20px;font-weight:500;margin-bottom:6px">Premium Wheat</div>
+          <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:12px">High-quality wheat grains harvested fresh from Kano state farms. Ideal for flour mills and commercial buyers.</div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px">
+            <span style="font-size:24px;font-weight:500;color:#0F6E56">₦450</span>
+            <span style="font-size:13px;color:var(--color-text-secondary)">/kg</span>
+          </div>
+          <div class="divider"></div>
+          <div class="row">
+            <span style="font-size:13px;color:var(--color-text-secondary)">Available stock</span>
+            <span class="badge badge-green">100 kg</span>
+          </div>
+          <div class="row">
+            <span style="font-size:13px;color:var(--color-text-secondary)">Minimum purchase</span>
+            <span class="badge badge-amber">50 kg</span>
+          </div>
+          <div class="row">
+            <span style="font-size:13px;color:var(--color-text-secondary)">Category</span>
+            <span class="tag">Grains & Cereals</span>
+          </div>
+          <div class="divider"></div>
+          <div class="field">
+            <label>Enter quantity (kg) — minimum 50 kg</label>
+            <div style="display:flex;gap:8px">
+              <div class="fbox" style="flex:1">50</div>
+              <div class="fbox" style="width:60px;text-align:center">kg</div>
+            </div>
+            <div style="font-size:11px;color:#854F0B;margin-top:4px"><i class="ti ti-info-circle" aria-hidden="true"></i> Minimum purchase quantity is 50 kg</div>
+          </div>
+          <button class="btn btn-primary" style="width:100%" onclick="show('cart')">Add to cart</button>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="card-title"><i class="ti ti-store" aria-hidden="true"></i> Seller info</div>
+          <div class="row">
+            <div>
+              <div style="font-size:14px;font-weight:500">Seller A</div>
+              <div style="font-size:12px;color:var(--color-text-secondary)">Kano, Nigeria</div>
+            </div>
+            <span class="badge badge-green">Verified</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART & CHECKOUT -->
+  <div class="screen" id="s-cart">
+    <div class="screen-label">Screen 3 — Multi-Seller Cart & Checkout</div>
+    <div class="grid2">
+      <div>
+        <div class="card">
+          <div class="card-title"><i class="ti ti-shopping-cart" aria-hidden="true"></i> Cart</div>
+          
+          <div style="background:#E1F5EE;border:.5px solid #9FE1CB;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px">
+            <div style="font-size:12px;font-weight:500;color:#085041;margin-bottom:10px">Seller A — Kano</div>
+            <div class="table-row">
+              <div class="c1" style="display:flex;align-items:center;gap:10px">
+                <div class="product-img"><i class="ti ti-plant-2" style="color:#1D9E75" aria-hidden="true"></i></div>
+                <div>
+                  <div style="font-size:13px;font-weight:500">Premium Wheat</div>
+                  <div style="font-size:11px;color:var(--color-text-secondary)">₦450/kg</div>
+                </div>
+              </div>
+              <div class="c2" style="font-size:13px">50 kg</div>
+              <div class="c3" style="font-size:13px;font-weight:500">₦22,500</div>
+            </div>
+            <div class="divider"></div>
+            <div style="font-size:12px;font-weight:500;color:#085041;margin-bottom:8px">Shipping for Seller A</div>
+            <div class="radio-opt">
+              <div class="radio-dot sel"></div>
+              <div><div style="font-size:13px">Seller's own shipping</div><div style="font-size:11px;color:var(--color-text-secondary)">₦1,500 flat rate</div></div>
+            </div>
+            <div class="radio-opt">
+              <div class="radio-dot"></div>
+              <div><div style="font-size:13px">Third-party logistics</div><div style="font-size:11px;color:var(--color-text-secondary)">Select a provider below</div></div>
+            </div>
+          </div>
+
+          <div style="background:#E6F1FB;border:.5px solid #B5D4F4;border-radius:var(--border-radius-md);padding:10px 14px">
+            <div style="font-size:12px;font-weight:500;color:#042C53;margin-bottom:10px">Seller B — Lagos</div>
+            <div class="table-row">
+              <div class="c1" style="display:flex;align-items:center;gap:10px">
+                <div class="product-img"><i class="ti ti-grain" style="color:#185FA5" aria-hidden="true"></i></div>
+                <div>
+                  <div style="font-size:13px;font-weight:500">Yellow Corn</div>
+                  <div style="font-size:11px;color:var(--color-text-secondary)">₦320/kg</div>
+                </div>
+              </div>
+              <div class="c2" style="font-size:13px">200 kg</div>
+              <div class="c3" style="font-size:13px;font-weight:500">₦64,000</div>
+            </div>
+            <div class="table-row">
+              <div class="c1" style="display:flex;align-items:center;gap:10px">
+                <div class="product-img"><i class="ti ti-plant" style="color:#185FA5" aria-hidden="true"></i></div>
+                <div>
+                  <div style="font-size:13px;font-weight:500">Premium Barley</div>
+                  <div style="font-size:11px;color:var(--color-text-secondary)">₦280/kg</div>
+                </div>
+              </div>
+              <div class="c2" style="font-size:13px">300 kg</div>
+              <div class="c3" style="font-size:13px;font-weight:500">₦84,000</div>
+            </div>
+            <div class="divider"></div>
+            <div style="font-size:12px;font-weight:500;color:#042C53;margin-bottom:8px">Shipping for Seller B</div>
+            <div class="radio-opt">
+              <div class="radio-dot"></div>
+              <div><div style="font-size:13px">Seller's own shipping</div><div style="font-size:11px;color:var(--color-text-secondary)">₦3,200 flat rate</div></div>
+            </div>
+            <div class="radio-opt" style="border-color:#185FA5">
+              <div class="radio-dot sel" style="border-color:#185FA5;background:#185FA5"></div>
+              <div>
+                <div style="font-size:13px">Third-party logistics</div>
+                <select style="font-size:12px;margin-top:4px;padding:3px 8px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-secondary)">
+                  <option>FastLogix Nigeria — ₦2,800</option>
+                  <option>SwiftCargo NG — ₦3,100</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-title"><i class="ti ti-receipt" aria-hidden="true"></i> Order summary</div>
+          <div class="row"><span style="font-size:13px;color:var(--color-text-secondary)">Wheat (50 kg)</span><span style="font-size:13px">₦22,500</span></div>
+          <div class="row"><span style="font-size:13px;color:var(--color-text-secondary)">Corn (200 kg)</span><span style="font-size:13px">₦64,000</span></div>
+          <div class="row"><span style="font-size:13px;color:var(--color-text-secondary)">Barley (300 kg)</span><span style="font-size:13px">₦84,000</span></div>
+          <div class="row"><span style="font-size:13px;color:var(--color-text-secondary)">Seller A shipping</span><span style="font-size:13px">₦1,500</span></div>
+          <div class="row"><span style="font-size:13px;color:var(--color-text-secondary)">FastLogix (Seller B)</span><span style="font-size:13px">₦2,800</span></div>
+          <div class="divider"></div>
+          <div class="row"><span style="font-size:14px;font-weight:500">Total</span><span style="font-size:16px;font-weight:500;color:#0F6E56">₦174,800</span></div>
+          <button class="btn btn-primary" style="width:100%;margin-top:12px">Place order</button>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="card-title"><i class="ti ti-shield-check" aria-hidden="true"></i> Collection code</div>
+          <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:8px">After order confirmation, you'll receive an email with a unique collection code. Share this with the delivery agent to confirm receipt.</div>
+          <div class="code-box">AGRI4F7K92</div>
+          <div style="font-size:11px;color:var(--color-text-tertiary);text-align:center">Sample collection code — sent via email</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELLER DASHBOARD -->
+  <div class="screen" id="s-seller">
+    <div class="screen-label">Screen 4 — Seller Dashboard</div>
+    <div class="sidebar-layout">
+      <div class="sidebar">
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-bottom:10px">Seller menu</div>
+        <div class="sidebar-item active"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Overview</div>
+        <div class="sidebar-item"><i class="ti ti-package" aria-hidden="true"></i> My products</div>
+        <div class="sidebar-item"><i class="ti ti-plus" aria-hidden="true"></i> Add product</div>
+        <div class="sidebar-item"><i class="ti ti-shopping-bag" aria-hidden="true"></i> Orders</div>
+        <div class="sidebar-item"><i class="ti ti-truck" aria-hidden="true"></i> Shipping rates</div>
+        <div class="sidebar-item"><i class="ti ti-wallet" aria-hidden="true"></i> Payouts</div>
+        <div class="sidebar-item"><i class="ti ti-user" aria-hidden="true"></i> Profile</div>
+      </div>
+      <div>
+        <div class="grid4" style="margin-bottom:12px">
+          <div class="stat"><div class="stat-label">Total orders</div><div class="stat-val">38</div></div>
+          <div class="stat"><div class="stat-label">Pending payouts</div><div class="stat-val">₦184k</div></div>
+          <div class="stat"><div class="stat-label">Active listings</div><div class="stat-val">12</div></div>
+          <div class="stat"><div class="stat-label">Stock (kg)</div><div class="stat-val">1,420</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="ti ti-package" aria-hidden="true"></i> My products</div>
+          <div class="table-head">
+            <div class="c1">Product</div>
+            <div class="c2">Stock</div>
+            <div class="c3">Min qty</div>
+            <div class="c4">Status</div>
+          </div>
+          <div class="table-row">
+            <div class="c1" style="font-size:13px">Premium Wheat</div>
+            <div class="c2" style="font-size:13px">100 kg</div>
+            <div class="c3" style="font-size:13px">50 kg</div>
+            <div class="c4"><span class="badge badge-green">Live</span></div>
+          </div>
+          <div class="table-row">
+            <div class="c1" style="font-size:13px">Yellow Corn</div>
+            <div class="c2" style="font-size:13px">400 kg</div>
+            <div class="c3" style="font-size:13px">100 kg</div>
+            <div class="c4"><span class="badge badge-green">Live</span></div>
+          </div>
+          <div class="table-row">
+            <div class="c1" style="font-size:13px">Sesame Seeds</div>
+            <div class="c2" style="font-size:13px">220 kg</div>
+            <div class="c3" style="font-size:13px">25 kg</div>
+            <div class="c4"><span class="badge badge-amber">Pending approval</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="card-title"><i class="ti ti-plus" aria-hidden="true"></i> Add new product</div>
+          <div class="grid2">
+            <div>
+              <div class="field"><label>Product name</label><div class="fbox">e.g. Premium Sorghum</div></div>
+              <div class="field"><label>Category</label><div class="fbox">Select category…</div></div>
+              <div class="field"><label>Price per kg (₦)</label><div class="fbox">0.00</div></div>
+            </div>
+            <div>
+              <div class="field"><label>Available quantity (kg)</label><div class="fbox">0</div></div>
+              <div class="field"><label>Minimum purchase quantity (kg)</label><div class="fbox">0</div></div>
+              <div class="field"><label>Short description</label><div class="fbox" style="height:60px;padding-top:8px">Describe the product…</div></div>
+            </div>
+          </div>
+          <div class="field"><label>Product images</label>
+            <div style="border:.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-md);padding:20px;text-align:center;color:var(--color-text-tertiary);font-size:13px">
+              <i class="ti ti-upload" style="font-size:24px;display:block;margin:0 auto 6px" aria-hidden="true"></i>
+              Drag & drop images or click to upload
+            </div>
+          </div>
+          <button class="btn btn-primary">Submit product</button>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="card-title"><i class="ti ti-truck" aria-hidden="true"></i> Shipping rate configuration</div>
+          <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:12px">Upload a CSV file defining shipping rates by weight, price, or item count versus destination zones.</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn btn-sm"><i class="ti ti-download" aria-hidden="true"></i> Download CSV template</button>
+            <button class="btn btn-sm btn-primary"><i class="ti ti-upload" aria-hidden="true"></i> Upload shipping CSV</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPER ADMIN -->
+  <div class="screen" id="s-admin">
+    <div class="screen-label">Screen 5 — Super Admin Panel</div>
+    <div class="sidebar-layout">
+      <div class="sidebar">
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-bottom:10px">Admin menu</div>
+        <div class="sidebar-item active"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</div>
+        <div class="sidebar-item"><i class="ti ti-user-check" aria-hidden="true"></i> Seller approvals</div>
+        <div class="sidebar-item"><i class="ti ti-truck" aria-hidden="true"></i> Logistics approvals</div>
+        <div class="sidebar-item"><i class="ti ti-package" aria-hidden="true"></i> Product approvals</div>
+        <div class="sidebar-item"><i class="ti ti-percentage" aria-hidden="true"></i> Commission settings</div>
+        <div class="sidebar-item"><i class="ti ti-wallet" aria-hidden="true"></i> Payout management</div>
+        <div class="sidebar-item"><i class="ti ti-settings" aria-hidden="true"></i> Platform settings</div>
+      </div>
+      <div>
+        <div class="grid4" style="margin-bottom:12px">
+          <div class="stat"><div class="stat-label">Pending sellers</div><div class="stat-val">7</div></div>
+          <div class="stat"><div class="stat-label">Pending products</div><div class="stat-val">14</div></div>
+          <div class="stat"><div class="stat-label">Pending payouts</div><div class="stat-val">₦2.1M</div></div>
+          <div class="stat"><div class="stat-label">Active logistics</div><div class="stat-val">5</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="ti ti-user-check" aria-hidden="true"></i> Seller approvals</div>
+          <div class="table-head">
+            <div class="c1">Seller name</div>
+            <div class="c2">Type</div>
+            <div class="c3">Registered</div>
+            <div class="c4">Action</div>
+          </div>
+          <div class="table-row">
+            <div class="c1" style="font-size:13px">Aminu Farms Ltd.</div>
+            <div class="c2"><span class="badge badge-blue">Farmer</span></div>
+            <div class="c3" style="font-size:12px;color:var(--color-text-secondary)">2 days ago</div>
+            <div class="c4" style="display:flex;gap:6px"><button class="btn btn-sm btn-primary">Approve</button><button class="btn btn-sm" style="color:#A32D2D">Reject</button></div>
+          </div>
+          <div class="table-row">
+            <div class="c1" style="font-size:13px">Delta Agro Co.</div>
+            <div class="c2"><span class="badge badge-amber">Aggregator</span></div>
+            <div class="c3" style="font-size:12px;color:var(--color-text-secondary)">3 days ago</div>
+            <div class="c4" style="display:flex;gap:6px"><button class="btn btn-sm btn-primary">Approve</button><button class="btn btn-sm" style="color:#A32D2D">Reject</button></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="card-title"><i class="ti ti-package" aria-hidden="true"></i> Product approvals</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div style="font-size:13px;color:var(--color-text-secondary)">Product approval mode:</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-sm btn-primary">Manual review</button>
+              <button class="btn btn-sm">Auto-publish</button>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="c1" style="font-size:13px">Sesame Seeds — Seller A</div>
+            <div class="c2"><span class="badge badge-amber">Pending</span></div>
+            <div class="c3" style="font-size:12px;color:var(--color-text-secondary)">220 kg</div>
+            <div class="c4" style="display:flex;gap:6px"><button class="btn btn-sm btn-primary">Approve</button><button class="btn btn-sm" style="color:#A32D2D">Reject</button></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="card-title"><i class="ti ti-percentage" aria-hidden="true"></i> Commission settings</div>
+          <div class="grid2">
+            <div class="field"><label>Default commission (%)</label><div class="fbox">10%</div></div>
+            <div class="field"><label>Per-seller override</label><div class="fbox">Select seller…</div></div>
+          </div>
+          <div class="divider"></div>
+          <div style="font-size:13px;font-weight:500;margin-bottom:10px">Payout calculation example</div>
+          <div class="row"><span style="font-size:13px;color:var(--color-text-secondary)">Order total</span><span>₦100</span></div>
+          <div class="row"><span style="font-size:13px;color:var(--color-text-secondary)">Admin commission (10%)</span><span>₦10</span></div>
+          <div class="row"><span style="font-size:13px;color:var(--color-text-secondary)">Seller payout</span><span style="color:#0F6E56">₦90</span></div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="card-title"><i class="ti ti-wallet" aria-hidden="true"></i> Payout management</div>
+          <div class="table-head">
+            <div class="c1">Seller</div>
+            <div class="c2">Amount</div>
+            <div class="c3">Status</div>
+            <div class="c4">Action</div>
+          </div>
+          <div class="table-row">
+            <div class="c1" style="font-size:13px">Seller A</div>
+            <div class="c2" style="font-size:13px">₦90,000</div>
+            <div class="c3"><span class="badge badge-amber">Pending</span></div>
+            <div class="c4"><button class="btn btn-sm btn-primary">Mark paid</button></div>
+          </div>
+          <div class="table-row">
+            <div class="c1" style="font-size:13px">FastLogix NG</div>
+            <div class="c2" style="font-size:13px">₦2,800</div>
+            <div class="c3"><span class="badge badge-blue">Delivered ✓</span></div>
+            <div class="c4"><button class="btn btn-sm btn-primary">Mark paid</button></div>
+          </div>
+          <div class="table-row">
+            <div class="c1" style="font-size:13px">Seller B</div>
+            <div class="c2" style="font-size:13px">₦132,000</div>
+            <div class="c3"><span class="badge badge-green">Paid</span></div>
+            <div class="c4"><button class="btn btn-sm">View record</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGISTICS -->
+  <div class="screen" id="s-logistics">
+    <div class="screen-label">Screen 6 — Logistics Provider Dashboard</div>
+    <div class="sidebar-layout">
+      <div class="sidebar">
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-bottom:10px">Logistics menu</div>
+        <div class="sidebar-item active"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Overview</div>
+        <div class="sidebar-item"><i class="ti ti-truck" aria-hidden="true"></i> Assigned orders</div>
+        <div class="sidebar-item"><i class="ti ti-map-pin" aria-hidden="true"></i> Delivery tracking</div>
+        <div class="sidebar-item"><i class="ti ti-file-spreadsheet" aria-hidden="true"></i> Shipping rates</div>
+        <div class="sidebar-item"><i class="ti ti-wallet" aria-hidden="true"></i> My payouts</div>
+      </div>
+      <div>
+        <div class="grid4" style="margin-bottom:12px">
+          <div class="stat"><div class="stat-label">Assigned orders</div><div class="stat-val">9</div></div>
+          <div class="stat"><div class="stat-label">Delivered today</div><div class="stat-val">3</div></div>
+          <div class="stat"><div class="stat-label">Pending payout</div><div class="stat-val">₦18.4k</div></div>
+          <div class="stat"><div class="stat-label">In transit</div><div class="stat-val">6</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="ti ti-truck" aria-hidden="true"></i> Assigned orders</div>
+          <div class="table-head">
+            <div class="c1">Order ID / buyer</div>
+            <div class="c2">Destination</div>
+            <div class="c3">Amount</div>
+            <div class="c4">Status</div>
+          </div>
+          <div class="table-row">
+            <div class="c1">
+              <div style="font-size:13px;font-weight:500">#ORD-0049</div>
+              <div style="font-size:11px;color:var(--color-text-secondary)">Customer C1</div>
+            </div>
+            <div class="c2" style="font-size:12px">Lagos</div>
+            <div class="c3" style="font-size:13px">₦2,800</div>
+            <div class="c4"><span class="badge badge-blue">In transit</span></div>
+          </div>
+          <div class="table-row">
+            <div class="c1">
+              <div style="font-size:13px;font-weight:500">#ORD-0048</div>
+              <div style="font-size:11px;color:var(--color-text-secondary)">Customer C2</div>
+            </div>
+            <div class="c2" style="font-size:12px">Abuja</div>
+            <div class="c3" style="font-size:13px">₦3,200</div>
+            <div class="c4"><span class="badge badge-amber">Pending pickup</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="card-title"><i class="ti ti-shield-check" aria-hidden="true"></i> Verify delivery — collection code</div>
+          <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:14px">Ask the customer for their collection code to confirm delivery and mark order as delivered.</div>
+          <div class="field">
+            <label>Order ID</label>
+            <div class="fbox">#ORD-0049</div>
+          </div>
+          <div class="field">
+            <label>Enter collection code provided by customer</label>
+            <div style="display:flex;gap:8px">
+              <div class="fbox" style="flex:1;font-family:var(--font-mono);letter-spacing:.15em">AGRI4F7K92</div>
+              <button class="btn btn-primary">Verify & deliver</button>
+            </div>
+          </div>
+          <div style="background:#E1F5EE;border:.5px solid #5DCAA5;border-radius:var(--border-radius-md);padding:10px 14px;font-size:13px;color:#085041;display:flex;align-items:center;gap:8px">
+            <i class="ti ti-circle-check" style="font-size:18px" aria-hidden="true"></i>
+            Code verified — order #ORD-0049 marked as delivered
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTRATION -->
+  <div class="screen" id="s-register">
+    <div class="screen-label">Screen 7 — Registration flows</div>
+    <div class="grid3">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-user-plus" aria-hidden="true"></i> Buyer registration</div>
+        <div class="field"><label>Full name</label><div class="fbox">Full name</div></div>
+        <div class="field"><label>Email</label><div class="fbox">email@example.com</div></div>
+        <div class="field"><label>Phone</label><div class="fbox">+234 …</div></div>
+        <div class="field"><label>Password</label><div class="fbox">••••••••</div></div>
+        <button class="btn btn-primary" style="width:100%;margin-top:4px">Create account</button>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-store" aria-hidden="true"></i> Seller registration</div>
+        <div class="field"><label>Business name</label><div class="fbox">Business name</div></div>
+        <div class="field"><label>Email</label><div class="fbox">email@example.com</div></div>
+        <div class="field"><label>Phone</label><div class="fbox">+234 …</div></div>
+        <div class="field"><label>Seller type <span style="color:var(--color-text-tertiary)">(for records only)</span></label>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <div class="radio-opt" style="flex:1;border-color:#1D9E75">
+              <div class="radio-dot sel"></div>
+              <div style="font-size:13px">Farmer</div>
+            </div>
+            <div class="radio-opt" style="flex:1">
+              <div class="radio-dot"></div>
+              <div style="font-size:13px">Aggregator</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">This selection is for backend records only — all sellers have identical features.</div>
+        </div>
+        <div class="field"><label>Password</label><div class="fbox">••••••••</div></div>
+        <button class="btn btn-primary" style="width:100%;margin-top:4px">Submit for approval</button>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-truck" aria-hidden="true"></i> Logistics provider registration</div>
+        <div class="field"><label>Company name</label><div class="fbox">Company name</div></div>
+        <div class="field"><label>Email</label><div class="fbox">email@example.com</div></div>
+        <div class="field"><label>Phone</label><div class="fbox">+234 …</div></div>
+        <div class="field"><label>Coverage area</label><div class="fbox">States / regions covered</div></div>
+        <div class="field"><label>Password</label><div class="fbox">••••••••</div></div>
+        <button class="btn btn-primary" style="width:100%;margin-top:4px">Submit for approval</button>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:8px;text-align:center">Approved by Super Admin before dashboard access</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="card-title"><i class="ti ti-git-branch" aria-hidden="true"></i> Approval flow overview</div>
+      <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-top:8px">
+        <div class="step-row" style="flex:1;min-width:140px;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-bottom:0">
+          <div class="step-num">1</div>
+          <div class="step-title" style="font-size:12px">User registers</div>
+          <div class="step-desc" style="font-size:11px">Seller / Logistics submits form</div>
+        </div>
+        <i class="ti ti-arrow-right" style="color:var(--color-text-tertiary);font-size:18px;flex-shrink:0" aria-hidden="true"></i>
+        <div class="step-row" style="flex:1;min-width:140px;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-bottom:0">
+          <div class="step-num">2</div>
+          <div class="step-title" style="font-size:12px">Super Admin reviews</div>
+          <div class="step-desc" style="font-size:11px">Approves or rejects application</div>
+        </div>
+        <i class="ti ti-arrow-right" style="color:var(--color-text-tertiary);font-size:18px;flex-shrink:0" aria-hidden="true"></i>
+        <div class="step-row" style="flex:1;min-width:140px;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-bottom:0">
+          <div class="step-num">3</div>
+          <div class="step-title" style="font-size:12px">Account activated</div>
+          <div class="step-desc" style="font-size:11px">User notified & gains access</div>
+        </div>
+        <i class="ti ti-arrow-right" style="color:var(--color-text-tertiary);font-size:18px;flex-shrink:0" aria-hidden="true"></i>
+        <div class="step-row" style="flex:1;min-width:140px;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-bottom:0">
+          <div class="step-num">4</div>
+          <div class="step-title" style="font-size:12px">Dashboard access</div>
+          <div class="step-desc" style="font-size:11px">Full role-based capabilities</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-pill').forEach(p=>p.classList.remove('active'));
+  document.getElementById('s-'+name).classList.add('active');
+  const map={home:0,product:1,cart:2,seller:3,admin:4,logistics:5,register:6};
+  document.querySelectorAll('.nav-pill')[map[name]].classList.add('active');
+}
+</script>
