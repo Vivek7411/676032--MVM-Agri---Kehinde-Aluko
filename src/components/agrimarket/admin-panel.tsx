@@ -28,6 +28,7 @@ import {
 } from 'lucide-react'
 import { useAgrimarketStore } from '@/store/agrimarket-store'
 import { useState } from 'react'
+import { useHydrated } from '@/hooks/use-hydrated'
 
 const SIDEBAR_ITEMS = [
   { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -53,22 +54,25 @@ export function AdminPanelPage() {
   const [productReviewMode, setProductReviewMode] = useState<'manual' | 'auto'>('manual')
   const [commissionDefault, setCommissionDefault] = useState('10')
   const [commissionOverrideSeller, setCommissionOverrideSeller] = useState('')
+  const hydrated = useHydrated()
 
   const activeItem = adminSidebarItem || 'dashboard'
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Mobile menu toggle */}
-      <button
-        className="fixed top-4 left-4 z-50 rounded-lg bg-[#1D9E75] p-2 text-white shadow-lg md:hidden"
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        aria-label="Toggle menu"
-      >
-        {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-      </button>
+      {/* Mobile menu toggle — only render after mount to avoid hydration mismatch */}
+      {hydrated && (
+        <button
+          className="fixed top-4 left-4 z-50 rounded-lg bg-[#1D9E75] p-2 text-white shadow-lg md:hidden"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      )}
 
       {/* Sidebar overlay for mobile */}
-      {mobileMenuOpen && (
+      {hydrated && mobileMenuOpen && (
         <div
           className="fixed inset-0 z-30 bg-black/40 md:hidden"
           onClick={() => setMobileMenuOpen(false)}
@@ -78,7 +82,7 @@ export function AdminPanelPage() {
       {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 z-40 h-full w-[200px] shrink-0 border-r border-gray-200 bg-white transition-transform duration-200 md:static md:translate-x-0 ${
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          hydrated && mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="p-4">

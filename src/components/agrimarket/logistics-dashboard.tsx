@@ -171,7 +171,7 @@ export function LogisticsDashboardPage() {
                   <Button
                     className="shrink-0 bg-[#1D9E75] text-white hover:bg-[#0F6E56]"
                   >
-                    Verify &amp; deliver
+                    Verify & deliver
                   </Button>
                 </div>
               </div>

@@ -393,7 +393,7 @@ export function RegistrationPage() {
                 </div>
                 <p className="text-sm font-semibold text-gray-900">Account activated</p>
                 <p className="text-xs text-muted-foreground">
-                  User notified &amp; gains access
+                  User notified & gains access
                 </p>
               </div>
 

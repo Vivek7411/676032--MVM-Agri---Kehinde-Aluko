@@ -77,7 +77,7 @@ export function ProductDetailPage() {
                 className="font-semibold border-0"
                 style={{ backgroundColor: '#E1F5EE', color: '#0F6E56' }}
               >
-                {product.stock} kg
+                {product.available} kg
               </Badge>
             </div>
 
@@ -85,7 +85,7 @@ export function ProductDetailPage() {
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Minimum purchase:</span>
               <Badge className="font-semibold border-0 bg-amber-50 text-amber-700">
-                {product.minPurchase} kg
+                {product.minQty} kg
               </Badge>
             </div>
 
@@ -113,7 +113,7 @@ export function ProductDetailPage() {
               <Input
                 id="quantity"
                 type="number"
-                min={product.minPurchase}
+                min={product.minQty}
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
                 className="flex-1"
@@ -123,7 +123,7 @@ export function ProductDetailPage() {
             <div className="flex items-start gap-1.5">
               <Info className="h-3.5 w-3.5 mt-0.5" style={{ color: '#5DCAA5' }} />
               <p className="text-xs text-gray-500">
-                Minimum quantity is {product.minPurchase} kg
+                Minimum quantity is {product.minQty} kg
               </p>
             </div>
           </div>
@@ -154,7 +154,7 @@ export function ProductDetailPage() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-gray-900">{product.seller}</p>
-            <p className="text-sm text-gray-500">{product.location}</p>
+            <p className="text-sm text-gray-500">{product.sellerLocation}</p>
           </div>
           <Badge
             className="font-semibold border-0 shrink-0"
