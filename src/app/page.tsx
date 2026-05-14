@@ -3,6 +3,7 @@
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Suspense, useCallback } from 'react'
 import { MarketplacePage } from '@/components/agrimarket/marketplace'
+import { CatalogViewPage } from '@/components/agrimarket/catalog-view'
 import { ProductDetailPage } from '@/components/agrimarket/product-detail'
 import { CartCheckoutPage } from '@/components/agrimarket/cart-checkout'
 import { SellerDashboardPage } from '@/components/agrimarket/seller-dashboard'
@@ -15,6 +16,7 @@ import { useAgrimarketStore } from '@/store/agrimarket-store'
 
 const NAV_ITEMS = [
   { key: 'home', label: 'Marketplace' },
+  { key: 'catalog', label: 'Catalog' },
   { key: 'cart', label: 'Cart' },
   { key: 'seller', label: 'Seller Dashboard' },
   { key: 'admin', label: 'Super Admin' },
@@ -89,6 +91,8 @@ function HomeContent() {
     switch (currentScreen) {
       case 'product':
         return <ProductDetailPage onNavigate={navigateTo} onBack={navigateHome} />
+      case 'catalog':
+        return <CatalogViewPage onNavigate={navigateTo} />
       case 'cart':
         return <CartCheckoutPage />
       case 'seller':

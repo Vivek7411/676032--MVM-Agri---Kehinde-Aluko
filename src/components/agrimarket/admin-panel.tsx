@@ -27,10 +27,7 @@ import {
   ToggleLeft,
   ToggleRight,
   FileSpreadsheet,
-  ArrowRight,
-  ClipboardList,
   Clock,
-  TrendingUp,
 } from 'lucide-react'
 import { useAgrimarketStore } from '@/store/agrimarket-store'
 import { useState } from 'react'
@@ -169,108 +166,6 @@ export function AdminPanelPage() {
                     </Card>
                   )
                 })}
-              </div>
-
-              {/* Overview & Quick Actions */}
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <Card className="border border-gray-200">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                      <ClipboardList className="h-4 w-4" style={{ color: '#1D9E75' }} />
-                      Pending approvals
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Sellers awaiting review</span>
-                        <Badge className="border-0 text-xs font-medium" style={{ backgroundColor: '#FEF3C7', color: '#92400E' }}>7</Badge>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Logistics providers</span>
-                        <Badge className="border-0 text-xs font-medium" style={{ backgroundColor: '#FEF3C7', color: '#92400E' }}>3</Badge>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Products pending</span>
-                        <Badge className="border-0 text-xs font-medium" style={{ backgroundColor: '#FEF3C7', color: '#92400E' }}>14</Badge>
-                      </div>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="mt-3 w-full text-xs text-[#0F6E56] border-[#1D9E75] hover:bg-[#E1F5EE]"
-                      onClick={() => setAdminSidebarItem('seller-approvals')}
-                    >
-                      Review approvals <ArrowRight className="ml-1 h-3 w-3" />
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="border border-gray-200">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                      <DollarSign className="h-4 w-4" style={{ color: '#1D9E75' }} />
-                      Payouts summary
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Seller payouts due</span>
-                        <span className="font-semibold text-gray-900">₦90,000</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Logistics payouts due</span>
-                        <span className="font-semibold text-gray-900">₦5,900</span>
-                      </div>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="mt-3 w-full text-xs text-[#0F6E56] border-[#1D9E75] hover:bg-[#E1F5EE]"
-                      onClick={() => setAdminSidebarItem('seller-payouts')}
-                    >
-                      Manage payouts <ArrowRight className="ml-1 h-3 w-3" />
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="border border-gray-200">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                      <TrendingUp className="h-4 w-4" style={{ color: '#1D9E75' }} />
-                      Quick actions
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="w-full justify-start text-xs text-gray-700 hover:bg-[#E1F5EE] hover:text-[#0F6E56]"
-                        onClick={() => setAdminSidebarItem('commission-settings')}
-                      >
-                        <Percent className="mr-2 h-3 w-3" /> Adjust commission rates
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="w-full justify-start text-xs text-gray-700 hover:bg-[#E1F5EE] hover:text-[#0F6E56]"
-                        onClick={() => setAdminSidebarItem('platform-settings')}
-                      >
-                        <Settings className="mr-2 h-3 w-3" /> Platform settings
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="w-full justify-start text-xs text-gray-700 hover:bg-[#E1F5EE] hover:text-[#0F6E56]"
-                        onClick={() => setAdminSidebarItem('product-approvals')}
-                      >
-                        <Package className="mr-2 h-3 w-3" /> Review products
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
               </div>
             </>
           )}

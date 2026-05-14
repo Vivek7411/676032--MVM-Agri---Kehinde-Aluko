@@ -43,3 +43,29 @@ Stage Summary:
 - All components now render identically on server and client during initial hydration
 - No verified seller badges exist to remove (already clean)
 - Per-seller and per-logistics commission sections already present in Super Admin
+
+---
+Task ID: 3
+Agent: main
+Task: Add GitHub Pages deployment, Catalog View with layered navigation, remove filters from marketplace, clean up admin dashboard
+
+Work Log:
+- Updated `next.config.ts`: changed `output: "standalone"` → `output: "export"`, added `images: { unoptimized: true }` for static export
+- Created `.github/workflows/deploy.yml`: GitHub Actions workflow with Bun, auto-deploys to GitHub Pages on push to main
+- Created `.gitignore` with standard Next.js entries
+- Created `README.md` with quick start and GitHub Pages deployment instructions
+- Created `src/components/agrimarket/catalog-view.tsx`: new Catalog page with left-side layered navigation panel (expandable Category → Subcategory → Product Type drill-down, Location filters, active filter badges) and product grid on right
+- Added "Catalog" nav item in top header (between Marketplace and Cart) in `page.tsx`
+- Added `catalog` route in `page.tsx` switch statement
+- Removed filter button, filter sidebar, and FilterPanel component from `marketplace.tsx`
+- Cleaned up marketplace imports (removed unused Select, X, SlidersHorizontal, ChevronRight, LOCATIONS, useState)
+- Category cards in marketplace now navigate to Catalog View on click
+- Removed "Pending approvals", "Payouts summary", "Quick actions" cards from Super Admin dashboard (kept Stats Row only)
+- Removed unused imports from admin-panel (ArrowRight, ClipboardList, TrendingUp)
+- All lint checks pass, all routes return HTTP 200
+
+Stage Summary:
+- GitHub Pages deployment ready: just push to GitHub, enable Pages with GitHub Actions source
+- Catalog View is a dedicated page with layered navigation filter (left panel) + product grid (right)
+- Marketplace is now clean: hero banner, category cards, featured listings — no filters
+- Super Admin dashboard simplified to just the stats row
