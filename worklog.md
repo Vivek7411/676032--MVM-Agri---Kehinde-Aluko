@@ -121,3 +121,108 @@ Stage Summary:
 - All products sold by weight only (kg or metric tonne) — no item/quantity concept anywhere
 - Weight-only disclaimers added to marketplace, product detail, and cart
 - All field names updated: minQty→minWeight, available→availableWeight, quantity→weight
+
+---
+Task ID: 5-c
+Agent: Subagent
+Task: Make logistics dashboard sidebar buttons conditionally render their dedicated content sections
+
+Work Log:
+- Read worklog.md and current logistics-dashboard.tsx to understand context
+- Identified the problem: all content cards were rendered on one page regardless of `logisticsSidebarItem` state
+- Rewrote logistics-dashboard.tsx with conditional rendering using `{logisticsSidebarItem === 'xxx' && (...)}`
+- Each sidebar item now shows only its dedicated content:
+  - `overview` — Stats row + welcome summary card + 4 quick-action cards linking to other sections
+  - `assigned-orders` — Assigned orders table card only
+  - `delivery-status` — Verify delivery / collection code card only
+  - `shipping-rates` — Shipping rate configuration card only (with CSV templates)
+  - `my-payouts` — My payouts table card only
+- Added `QUICK_ACTIONS` array for overview page with clickable cards that navigate to other sections
+- Added `ArrowRight` import from lucide-react for quick action card arrows
+- All existing content/cards preserved exactly — just conditionally rendered
+- Green theme colors (#1D9E75, #0F6E56, #E1F5EE, #5DCAA5) maintained throughout
+- Wireframe disclaimer banner preserved
+- All existing imports kept
+- Uses `useAgrimarketStore` for `logisticsSidebarItem` and `setLogisticsSidebarItem`
+- Lint passes cleanly with no errors
+- Dev server compiles successfully
+
+Stage Summary:
+- Logistics dashboard sidebar buttons now show dedicated content per section instead of all-at-once
+- Overview page serves as a hub with stats and quick-action links to other sections
+- No visual content was removed — all cards preserved, just conditionally shown
+
+---
+Task ID: 5-b
+Agent: Subagent
+Task: Rewrite admin panel so sidebar buttons conditionally render dedicated content sections
+
+Work Log:
+- Read worklog.md (Tasks 1-4) and current admin-panel.tsx to understand context
+- Identified the problem: all content cards (stats, seller approvals, product approvals, shipping toggle, commission settings, seller payouts, logistics payouts) were rendered on one page regardless of `adminSidebarItem` state
+- Rewrote admin-panel.tsx with conditional rendering using `{activeItem === 'xxx' && (...)}`
+- Each sidebar item now shows only its dedicated content:
+  - `dashboard` — Stats row + overview/quick actions (3 cards: pending approvals summary, payouts summary, quick action links)
+  - `seller-approvals` — Seller approvals table card only
+  - `logistics-approvals` — New logistics approvals table card with sample data (3 providers: FastLogix NG, SwiftCargo NG, HaulPro Logistics)
+  - `product-approvals` — Product approvals table card only (with manual/auto review toggle + auto-publish info banner)
+  - `commission-settings` — Commission & tax settings card only (with payout calculation example)
+  - `seller-payouts` — Seller payouts table card only
+  - `logistics-payouts` — Logistics payouts table card only
+  - `platform-settings` — Shipping toggle per seller card + new general platform settings card (marketplace visibility, currency, min order value, maintenance mode toggle, delivery confirmation toggle, save button)
+- Moved shipping toggle per seller card from the main page to `platform-settings` section
+- Added new `ArrowRight`, `ClipboardList`, `Clock`, `TrendingUp` icon imports from lucide-react for dashboard quick actions
+- Dashboard overview includes clickable quick-action cards that navigate to other admin sections via `setAdminSidebarItem()`
+- Added auto-publish info banner on product-approvals page when mode is set to auto
+- Added a second product row (Tomatoes) to product-approvals for more sample data
+- All existing content/cards preserved exactly — just conditionally rendered
+- Green theme colors (#1D9E75, #0F6E56, #E1F5EE, #5DCAA5) maintained throughout
+- Wireframe disclaimer banner preserved
+- All existing imports, `useHydrated` hook, and mobile menu logic kept
+- Uses `useAgrimarketStore` for `adminSidebarItem` and `setAdminSidebarItem`
+- Lint passes cleanly with no errors
+- Dev server compiles successfully
+
+Stage Summary:
+- Admin panel sidebar buttons now show dedicated content per section instead of all-at-once
+- Dashboard page serves as a hub with stats and quick-action links to other sections
+- New logistics-approvals page created with sample data
+- New platform-settings page with shipping toggles + general settings
+- No visual content was removed — all cards preserved, just conditionally shown
+
+---
+Task ID: 5-a
+Agent: Subagent
+Task: Rewrite seller dashboard so sidebar buttons conditionally render dedicated content sections
+
+Work Log:
+- Read worklog.md (Tasks 1-5c/5b) and current seller-dashboard.tsx to understand context
+- Identified the problem: all content cards (stats, products table, add product form, shipping config, profile) were rendered on one page regardless of `sellerSidebarItem` state
+- Rewrote seller-dashboard.tsx with conditional rendering using `{sellerSidebarItem === 'xxx' && (...)}`
+- Each sidebar item now shows only its dedicated content:
+  - `overview` — Stats row + quick actions card (6 clickable links to other sections) + recent orders summary card (3 most recent orders with "View all →" link)
+  - `my-products` — Products table card only (preserved exactly)
+  - `add-product` — Add new product form card only (preserved exactly)
+  - `orders` — NEW orders list card with sample wireframe data (5 orders: ORD-1042 through ORD-1028, with buyer, product, weight, total, date, status columns). Includes mini-stats row (Total/Pending/Processing/Delivered) and color-coded status badges with icons
+  - `shipping` — Shipping rate configuration card only (preserved exactly with CSV templates)
+  - `payouts` — NEW payouts card with sample wireframe data. Includes 3 summary stat cards (Total earned ₦1,245k / Pending ₦184k / Last payout ₦280k) and payouts history table (5 entries with Payout ID, Order, Amount, Method, Date, Status). Has export CSV button
+  - `profile` — Profile & Location card only (preserved exactly)
+- Added new icon imports: ArrowRight, Clock, CheckCircle2, CircleDot, Banknote, TrendingUp for orders/payouts sections
+- Added `SAMPLE_ORDERS` constant with 5 sample orders and `SAMPLE_PAYOUTS` constant with 5 sample payouts
+- Added `orderStatusColor()` and `orderStatusIcon()` helper functions for order status badges
+- Added `payoutStatusColor()` helper function for payout status badges
+- Quick action cards on overview page use `setSellerSidebarItem()` to navigate to other sections
+- All existing content/cards preserved exactly — just conditionally rendered
+- Green theme colors (#1D9E75, #0F6E56, #E1F5EE, #5DCAA5) maintained throughout
+- Wireframe disclaimer banner preserved
+- All existing imports and CATEGORIES/LOCATIONS usage kept
+- Uses `useAgrimarketStore` for `sellerSidebarItem` and `setSellerSidebarItem`
+- Lint passes cleanly with no errors
+- Dev server compiles successfully
+
+Stage Summary:
+- Seller dashboard sidebar buttons now show dedicated content per section instead of all-at-once
+- Overview page serves as a hub with stats, quick-action links, and recent orders summary
+- New orders page with 5 sample orders and color-coded statuses
+- New payouts page with summary stats and payout history table
+- No visual content was removed — all existing cards preserved, just conditionally shown
