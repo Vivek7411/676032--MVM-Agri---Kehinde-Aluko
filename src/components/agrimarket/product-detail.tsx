@@ -160,16 +160,6 @@ export function ProductDetailPage({ onNavigate, onBack }: ProductDetailPageProps
           {/* Info rows */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Available weight:</span>
-              <Badge
-                className="font-semibold border-0"
-                style={{ backgroundColor: '#E1F5EE', color: '#0F6E56' }}
-              >
-                {product.availableWeight} {unitShort}
-              </Badge>
-            </div>
-
-            <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Minimum weight:</span>
               <Badge className="font-semibold border-0 bg-amber-50 text-amber-700">
                 {product.minWeight} {unitShort}

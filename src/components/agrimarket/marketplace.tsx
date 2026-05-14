@@ -587,16 +587,13 @@ export function MarketplacePage({ onNavigate }: MarketplacePageProps) {
                             </div>
                           </CardContent>
 
-                          <CardFooter className="flex items-center justify-between gap-2 pt-0 pb-3">
+                          <CardFooter className="flex items-center gap-2 pt-0 pb-3">
                             <Badge
                               className="border-amber-300 bg-amber-50 text-amber-700 text-[10px]"
                               variant="outline"
                             >
                               Min. {product.minWeight} {product.unit === 'metric-tonne' ? 'MT' : 'kg'}
                             </Badge>
-                            <span className="text-[10px] text-gray-400">
-                              {product.availableWeight.toLocaleString()} {product.unit === 'metric-tonne' ? 'MT' : 'kg'} available
-                            </span>
                           </CardFooter>
                         </Card>
                       )
