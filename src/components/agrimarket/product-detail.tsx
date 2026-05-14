@@ -1,19 +1,84 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { Wheat, Info, Store, ShieldCheck, ArrowLeft, Plus } from 'lucide-react';
-import { useAgrimarketStore, PRODUCTS } from '@/store/agrimarket-store';
+import { useState } from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Wheat, Info, Store, ShieldCheck, ArrowLeft, Plus, Leaf, Fish, Warehouse, Package } from 'lucide-react'
+import { useAgrimarketStore, PRODUCTS, CATEGORIES } from '@/store/agrimarket-store'
+import type { UnitOfMeasure } from '@/store/agrimarket-store'
+
+const PRODUCT_ICONS: Record<string, React.ReactNode> = {
+  wheat: <Wheat className="h-16 w-16" style={{ color: '#1D9E75' }} />,
+  grain: <Wheat className="h-16 w-16" style={{ color: '#b45309' }} />,
+  barley: <Wheat className="h-16 w-16" style={{ color: '#a16207' }} />,
+  leaf: <Leaf className="h-16 w-16" style={{ color: '#16a34a' }} />,
+  fish: <Fish className="h-16 w-16" style={{ color: '#0284c7' }} />,
+  warehouse: <Warehouse className="h-16 w-16" style={{ color: '#7c3aed' }} />,
+  package: <Package className="h-16 w-16" style={{ color: '#0d9488' }} />,
+}
+
+const THUMB_ICONS: Record<string, React.ReactNode> = {
+  wheat: <Wheat className="h-5 w-5" style={{ color: '#5DCAA5' }} />,
+  grain: <Wheat className="h-5 w-5" style={{ color: '#d97706' }} />,
+  barley: <Wheat className="h-5 w-5" style={{ color: '#ca8a04' }} />,
+  leaf: <Leaf className="h-5 w-5" style={{ color: '#22c55e' }} />,
+  fish: <Fish className="h-5 w-5" style={{ color: '#38bdf8' }} />,
+  warehouse: <Warehouse className="h-5 w-5" style={{ color: '#a78bfa' }} />,
+  package: <Package className="h-5 w-5" style={{ color: '#2dd4bf' }} />,
+}
 
 export function ProductDetailPage() {
-  const { selectedProduct, setScreen } = useAgrimarketStore();
-  const product = selectedProduct ?? PRODUCTS[0];
-  const [quantity, setQuantity] = useState<string>('50');
+  const selectedProduct = useAgrimarketStore((s) => s.selectedProduct)
+  const setScreen = useAgrimarketStore((s) => s.setScreen)
+  const addToCart = useAgrimarketStore((s) => s.addToCart)
+
+  // Look up product by ID
+  const product = PRODUCTS.find((p) => p.id === selectedProduct) ?? PRODUCTS[0]
+
+  const defaultQty = product.minQty
+  const [quantity, setQuantity] = useState<string>(String(defaultQty))
+  const [unit, setUnit] = useState<UnitOfMeasure>(product.unit)
+
+  // Get category labels
+  const categoryObj = CATEGORIES.find((c) => c.id === product.category)
+  const subCategoryObj = categoryObj?.subcategories.find((s) => s.id === product.subCategory)
+  const productTypeObj = subCategoryObj?.types.find((t) => t.id === product.productType)
+
+  const categoryLabel = categoryObj?.name ?? product.category
+  const subCategoryLabel = subCategoryObj?.name ?? product.subCategory
+  const productTypeLabel = productTypeObj?.name ?? product.productType
+
+  const unitLabel = unit === 'metric-tonne' ? 'metric tonne' : 'kg'
+  const unitShort = unit === 'metric-tonne' ? 'MT' : 'kg'
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      sellerId: product.sellerId,
+      sellerName: product.seller,
+      sellerLocation: product.sellerLocation,
+      pricePerUnit: product.price,
+      unit,
+      quantity: Number(quantity) || product.minQty,
+      icon: product.icon,
+      category: product.category,
+      subCategory: product.subCategory,
+      productType: product.productType,
+    })
+    setScreen('cart')
+  }
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-6 space-y-6">
@@ -27,6 +92,17 @@ export function ProductDetailPage() {
         Back to Marketplace
       </button>
 
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-1.5 text-xs text-gray-400">
+        <button onClick={() => setScreen('home')} className="hover:text-[#1D9E75]">Marketplace</button>
+        <span>/</span>
+        <span className="text-gray-600">{categoryLabel}</span>
+        <span>/</span>
+        <span className="text-gray-600">{subCategoryLabel}</span>
+        <span>/</span>
+        <span className="text-gray-800 font-medium">{productTypeLabel}</span>
+      </div>
+
       {/* Two-column layout */}
       <div className="flex flex-col md:flex-row gap-6">
         {/* Left column — Image gallery */}
@@ -36,7 +112,7 @@ export function ProductDetailPage() {
             className="w-full rounded-lg flex items-center justify-center"
             style={{ height: 220, backgroundColor: '#f3f4f6' }}
           >
-            <Wheat className="h-16 w-16" style={{ color: '#1D9E75' }} />
+            {PRODUCT_ICONS[product.icon] ?? <Wheat className="h-16 w-16" style={{ color: '#1D9E75' }} />}
           </div>
 
           {/* Thumbnail placeholders */}
@@ -47,7 +123,7 @@ export function ProductDetailPage() {
                 className="flex-1 rounded-md flex items-center justify-center"
                 style={{ height: 64, backgroundColor: '#f3f4f6' }}
               >
-                <Wheat className="h-5 w-5" style={{ color: '#5DCAA5' }} />
+                {THUMB_ICONS[product.icon] ?? <Wheat className="h-5 w-5" style={{ color: '#5DCAA5' }} />}
               </div>
             ))}
           </div>
@@ -58,47 +134,47 @@ export function ProductDetailPage() {
           {/* Product name */}
           <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
 
+          {/* Category hierarchy */}
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Badge variant="outline" className="text-xs border-[#5DCAA5] text-[#0F6E56]">{categoryLabel}</Badge>
+            <span className="text-gray-300">→</span>
+            <Badge variant="outline" className="text-xs border-gray-300 text-gray-600">{subCategoryLabel}</Badge>
+            <span className="text-gray-300">→</span>
+            <Badge variant="outline" className="text-xs border-gray-300 text-gray-600">{productTypeLabel}</Badge>
+          </div>
+
           {/* Description */}
           <p className="text-sm text-gray-600 leading-relaxed">{product.description}</p>
 
           {/* Price */}
           <p className="text-3xl font-bold" style={{ color: '#1D9E75' }}>
-            ₦{product.price.toLocaleString()}/kg
+            ₦{product.price.toLocaleString()}/{unitLabel}
           </p>
 
           <Separator />
 
           {/* Info rows */}
           <div className="space-y-3">
-            {/* Available stock */}
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Available stock:</span>
               <Badge
                 className="font-semibold border-0"
                 style={{ backgroundColor: '#E1F5EE', color: '#0F6E56' }}
               >
-                {product.available} kg
+                {product.available} {unitShort}
               </Badge>
             </div>
 
-            {/* Minimum purchase */}
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Minimum purchase:</span>
               <Badge className="font-semibold border-0 bg-amber-50 text-amber-700">
-                {product.minQty} kg
+                {product.minQty} {unitShort}
               </Badge>
             </div>
 
-            {/* Category */}
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Category:</span>
-              <Badge
-                variant="outline"
-                className="font-medium"
-                style={{ borderColor: '#5DCAA5', color: '#1D9E75' }}
-              >
-                {product.category}
-              </Badge>
+              <span className="text-sm font-medium text-gray-700">Location:</span>
+              <span className="text-sm text-gray-600">{product.sellerLocation}</span>
             </div>
           </div>
 
@@ -118,12 +194,23 @@ export function ProductDetailPage() {
                 onChange={(e) => setQuantity(e.target.value)}
                 className="flex-1"
               />
-              <span className="text-sm font-medium text-gray-500">kg</span>
+              <Select
+                value={unit}
+                onValueChange={(val) => setUnit(val as UnitOfMeasure)}
+              >
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="kg">Kilograms (kg)</SelectItem>
+                  <SelectItem value="metric-tonne">Metric Tonne (MT)</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex items-start gap-1.5">
               <Info className="h-3.5 w-3.5 mt-0.5" style={{ color: '#5DCAA5' }} />
               <p className="text-xs text-gray-500">
-                Minimum quantity is {product.minQty} kg
+                Minimum quantity is {product.minQty} {unitShort}. 1 metric tonne = 1,000 kg
               </p>
             </div>
           </div>
@@ -132,7 +219,7 @@ export function ProductDetailPage() {
           <Button
             className="w-full text-white font-semibold py-3"
             style={{ backgroundColor: '#1D9E75' }}
-            onClick={() => setScreen('cart')}
+            onClick={handleAddToCart}
           >
             <Plus className="h-4 w-4 mr-2" />
             Add to cart
@@ -166,5 +253,5 @@ export function ProductDetailPage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

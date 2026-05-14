@@ -14,13 +14,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ShoppingCart, Receipt, ShieldCheck, Truck, CircleCheck, Wheat, X } from 'lucide-react'
+import { ShoppingCart, Receipt, ShieldCheck, Truck, CircleCheck, Wheat, X, Info, Leaf, Fish, Warehouse, Package } from 'lucide-react'
 import { useAgrimarketStore } from '@/store/agrimarket-store'
 
 const PRODUCT_ICONS: Record<string, React.ReactNode> = {
   wheat: <Wheat className="h-5 w-5 text-[#1D9E75]" />,
   grain: <Wheat className="h-5 w-5 text-amber-600" />,
   barley: <Wheat className="h-5 w-5 text-yellow-700" />,
+  leaf: <Leaf className="h-5 w-5 text-green-600" />,
+  fish: <Fish className="h-5 w-5 text-sky-600" />,
+  warehouse: <Warehouse className="h-5 w-5 text-purple-600" />,
+  package: <Package className="h-5 w-5 text-teal-600" />,
 }
 
 type ShippingMethod = 'seller' | 'third-party'
@@ -30,8 +34,11 @@ interface SellerShippingState {
   thirdPartyProvider: string
 }
 
+const TAX_RATE = 0.075 // 7.5% VAT Nigeria
+
 export function CartCheckoutPage() {
   const cartItems = useAgrimarketStore((state) => state.cartItems)
+  const removeFromCart = useAgrimarketStore((state) => state.removeFromCart)
 
   const [sellerShipping, setSellerShipping] = useState<Record<string, SellerShippingState>>({
     'seller-a': { method: 'seller', thirdPartyProvider: 'fastlogix' },
@@ -105,14 +112,15 @@ export function CartCheckoutPage() {
 
   // Calculate subtotal
   const subtotal = useMemo(() => {
-    return cartItems.reduce((sum, item) => sum + item.pricePerKg * item.quantityKg, 0)
+    return cartItems.reduce((sum, item) => sum + item.pricePerUnit * item.quantity, 0)
   }, [cartItems])
 
   const totalShipping = useMemo(() => {
     return Object.values(shippingCosts).reduce((sum, cost) => sum + cost, 0)
   }, [shippingCosts])
 
-  const total = subtotal + totalShipping
+  const tax = Math.round(subtotal * TAX_RATE)
+  const total = subtotal + totalShipping + tax
 
   const handleShippingMethodChange = (sellerId: string, method: ShippingMethod) => {
     setSellerShipping((prev) => ({
@@ -130,6 +138,13 @@ export function CartCheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gray-50/50 px-4 py-6 sm:px-6 lg:px-8">
+      {/* Wireframe Disclaimer */}
+      <div className="mb-4 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5">
+        <p className="text-center text-xs text-amber-800 font-medium">
+          ⚠️ This is a wireframe prototype. Cart and checkout flows are for demonstration only.
+        </p>
+      </div>
+
       <div className="mx-auto max-w-6xl">
         {/* Page Title */}
         <div className="mb-6">
@@ -212,19 +227,19 @@ export function CartCheckoutPage() {
                             <div className="min-w-0 flex-1">
                               <p className="truncate text-sm font-semibold text-gray-900">{item.name}</p>
                               <p className="text-xs text-gray-500">
-                                ₦{item.pricePerKg.toLocaleString()}/kg
+                                ₦{item.pricePerUnit.toLocaleString()}/{item.unit === 'metric-tonne' ? 'MT' : 'kg'}
                               </p>
                             </div>
 
                             {/* Quantity */}
                             <div className="shrink-0 text-right">
-                              <p className="text-sm font-medium text-gray-700">{item.quantityKg} kg</p>
+                              <p className="text-sm font-medium text-gray-700">{item.quantity} {item.unit === 'metric-tonne' ? 'MT' : 'kg'}</p>
                             </div>
 
                             {/* Line Total */}
                             <div className="shrink-0 text-right">
                               <p className="text-sm font-bold" style={{ color: sellerAccentDark }}>
-                                ₦{(item.pricePerKg * item.quantityKg).toLocaleString()}
+                                ₦{(item.pricePerUnit * item.quantity).toLocaleString()}
                               </p>
                             </div>
 
@@ -232,6 +247,7 @@ export function CartCheckoutPage() {
                             <button
                               className="shrink-0 rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-200/60 hover:text-gray-600"
                               aria-label={`Remove ${item.name}`}
+                              onClick={() => removeFromCart(item.id)}
                             >
                               <X className="h-4 w-4" />
                             </button>
@@ -350,10 +366,10 @@ export function CartCheckoutPage() {
                   <div key={item.id} className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">
                       {item.name}{' '}
-                      <span className="text-gray-400">{item.quantityKg}kg</span>
+                      <span className="text-gray-400">{item.quantity}{item.unit === 'metric-tonne' ? 'MT' : 'kg'}</span>
                     </span>
                     <span className="text-sm font-medium text-gray-800">
-                      ₦{(item.pricePerKg * item.quantityKg).toLocaleString()}
+                      ₦{(item.pricePerUnit * item.quantity).toLocaleString()}
                     </span>
                   </div>
                 ))}
@@ -369,6 +385,30 @@ export function CartCheckoutPage() {
                     </span>
                   </div>
                 ))}
+
+                <Separator className="my-2" />
+
+                {/* Subtotal */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Subtotal</span>
+                  <span className="text-sm font-medium text-gray-800">₦{subtotal.toLocaleString()}</span>
+                </div>
+
+                {/* Tax */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">
+                    VAT (7.5%)
+                  </span>
+                  <span className="text-sm font-medium text-gray-800">
+                    ₦{tax.toLocaleString()}
+                  </span>
+                </div>
+
+                {/* Shipping */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Shipping</span>
+                  <span className="text-sm font-medium text-gray-800">₦{totalShipping.toLocaleString()}</span>
+                </div>
 
                 <Separator className="my-2" />
 
@@ -400,7 +440,7 @@ export function CartCheckoutPage() {
                   <span className="text-sm font-semibold text-[#0F6E56]">Collection code</span>
                 </div>
                 <p className="text-xs leading-relaxed text-[#0F6E56]/80">
-                  After placing your order, you will receive a unique collection code via email. Present this code at the pickup point to collect your order.
+                  After placing your order, you will receive a unique collection code. Present this code at the pickup point to collect your order.
                 </p>
                 <div className="flex items-center justify-center rounded-lg border-2 border-dashed border-[#5DCAA5] bg-white px-4 py-3">
                   <span className="text-2xl font-bold tracking-widest text-[#1D9E75]">
@@ -410,6 +450,19 @@ export function CartCheckoutPage() {
                 <p className="text-center text-[10px] text-[#0F6E56]/50">
                   Sample code — your actual code will be generated upon order placement
                 </p>
+              </CardContent>
+            </Card>
+
+            {/* Platform Fee Disclaimer */}
+            <Card className="border-gray-200 bg-gray-50 shadow-sm">
+              <CardContent className="pt-4 space-y-2">
+                <div className="flex items-start gap-2">
+                  <Info className="h-4 w-4 text-gray-400 mt-0.5 shrink-0" />
+                  <div className="text-xs text-gray-500 leading-relaxed">
+                    <p className="font-medium text-gray-600 mb-1">Important notice</p>
+                    <p>Platform fee / commission is handled between the seller and AgriMarket and is not visible in the buyer&apos;s cart. The total shown above is the amount you pay.</p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -24,8 +25,13 @@ import {
   Upload,
   Download,
   Wheat,
+  FileSpreadsheet,
+  MapPin,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react'
-import { useAgrimarketStore } from '@/store/agrimarket-store'
+import { useAgrimarketStore, CATEGORIES, LOCATIONS } from '@/store/agrimarket-store'
+import { useState } from 'react'
 
 const SIDEBAR_ITEMS = [
   { key: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -45,17 +51,30 @@ const STATS = [
 ] as const
 
 const PRODUCTS_TABLE = [
-  { name: 'Premium Wheat', stock: '100kg', minQty: '50kg', status: 'Live' },
-  { name: 'Yellow Corn', stock: '400kg', minQty: '100kg', status: 'Live' },
-  { name: 'Sesame Seeds', stock: '220kg', minQty: '25kg', status: 'Pending approval' },
+  { name: 'Premium Wheat', stock: '100 kg', minQty: '50 kg', unit: 'kg', status: 'Live' },
+  { name: 'Yellow Corn', stock: '400 kg', minQty: '100 kg', unit: 'kg', status: 'Live' },
+  { name: 'Sesame Seeds', stock: '220 kg', minQty: '25 kg', unit: 'kg', status: 'Pending approval' },
+  { name: 'NPK Fertilizer', stock: '10 MT', minQty: '1 MT', unit: 'metric-tonne', status: 'Live' },
 ] as const
 
 export function SellerDashboardPage() {
   const sellerSidebarItem = useAgrimarketStore((s) => s.sellerSidebarItem)
   const setSellerSidebarItem = useAgrimarketStore((s) => s.setSellerSidebarItem)
+  const [expandedTemplate, setExpandedTemplate] = useState<string | null>(null)
+
+  const toggleTemplate = (key: string) => {
+    setExpandedTemplate(expandedTemplate === key ? null : key)
+  }
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Wireframe Disclaimer */}
+      <div className="bg-amber-50 border-b border-amber-200 px-4 py-2">
+        <p className="text-center text-xs text-amber-800 font-medium">
+          ⚠️ Wireframe prototype — final implementation may vary
+        </p>
+      </div>
+
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[200px_1fr]">
           {/* Sidebar */}
@@ -120,6 +139,7 @@ export function SellerDashboardPage() {
                         <th className="pb-3 pr-4">Product</th>
                         <th className="pb-3 pr-4">Stock</th>
                         <th className="pb-3 pr-4">Min qty</th>
+                        <th className="pb-3 pr-4">Unit</th>
                         <th className="pb-3">Status</th>
                       </tr>
                     </thead>
@@ -129,6 +149,7 @@ export function SellerDashboardPage() {
                           <td className="py-3 pr-4 font-medium text-gray-900">{product.name}</td>
                           <td className="py-3 pr-4 text-gray-600">{product.stock}</td>
                           <td className="py-3 pr-4 text-gray-600">{product.minQty}</td>
+                          <td className="py-3 pr-4 text-gray-600">{product.unit === 'metric-tonne' ? 'MT' : 'kg'}</td>
                           <td className="py-3">
                             {product.status === 'Live' ? (
                               <Badge className="border-green-300 bg-green-50 text-green-700 hover:bg-green-100">
@@ -177,67 +198,146 @@ export function SellerDashboardPage() {
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="grains-cereals">Grains & Cereals</SelectItem>
-                        <SelectItem value="vegetables">Vegetables</SelectItem>
-                        <SelectItem value="fruits">Fruits</SelectItem>
-                        <SelectItem value="livestock">Livestock</SelectItem>
-                        <SelectItem value="seeds">Seeds</SelectItem>
-                        <SelectItem value="legumes">Legumes</SelectItem>
+                        {CATEGORIES.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="price-per-kg" className="text-sm font-medium text-gray-700">
-                      Price per kg
+                    <Label htmlFor="subcategory" className="text-sm font-medium text-gray-700">
+                      Sub category
                     </Label>
-                    <Input
-                      id="price-per-kg"
-                      type="number"
-                      placeholder="₦0"
-                      className="border-gray-300 focus-visible:ring-[#1D9E75]"
-                    />
+                    <Select>
+                      <SelectTrigger className="w-full border-gray-300 focus:ring-[#1D9E75]">
+                        <SelectValue placeholder="Select sub category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="crops">Crops</SelectItem>
+                        <SelectItem value="vegetables">Vegetables</SelectItem>
+                        <SelectItem value="fruits">Fruits</SelectItem>
+                        <SelectItem value="poultry">Poultry</SelectItem>
+                        <SelectItem value="cattle">Cattle</SelectItem>
+                        <SelectItem value="storage">Storage</SelectItem>
+                        <SelectItem value="transport">Transport</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="product-type" className="text-sm font-medium text-gray-700">
+                      Product type
+                    </Label>
+                    <Select>
+                      <SelectTrigger className="w-full border-gray-300 focus:ring-[#1D9E75]">
+                        <SelectValue placeholder="Select product type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="corn">Corn</SelectItem>
+                        <SelectItem value="wheat">Wheat</SelectItem>
+                        <SelectItem value="rice">Rice</SelectItem>
+                        <SelectItem value="chickens">Chickens</SelectItem>
+                        <SelectItem value="tomatoes">Tomatoes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="price" className="text-sm font-medium text-gray-700">
+                      Price
+                    </Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="price"
+                        type="number"
+                        placeholder="₦0"
+                        className="flex-1 border-gray-300 focus-visible:ring-[#1D9E75]"
+                      />
+                      <Select>
+                        <SelectTrigger className="w-[150px] border-gray-300">
+                          <SelectValue placeholder="Unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="kg">Per kg</SelectItem>
+                          <SelectItem value="metric-tonne">Per metric tonne</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="available-qty" className="text-sm font-medium text-gray-700">
                       Available quantity
                     </Label>
-                    <Input
-                      id="available-qty"
-                      type="number"
-                      placeholder="kg"
-                      className="border-gray-300 focus-visible:ring-[#1D9E75]"
-                    />
+                    <div className="flex gap-2">
+                      <Input
+                        id="available-qty"
+                        type="number"
+                        placeholder="0"
+                        className="flex-1 border-gray-300 focus-visible:ring-[#1D9E75]"
+                      />
+                      <Select>
+                        <SelectTrigger className="w-[150px] border-gray-300">
+                          <SelectValue placeholder="Unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="kg">kg</SelectItem>
+                          <SelectItem value="metric-tonne">Metric tonne (MT)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="min-purchase-qty" className="text-sm font-medium text-gray-700">
                       Min purchase quantity
                     </Label>
-                    <Input
-                      id="min-purchase-qty"
-                      type="number"
-                      placeholder="kg"
-                      className="border-gray-300 focus-visible:ring-[#1D9E75]"
-                    />
+                    <div className="flex gap-2">
+                      <Input
+                        id="min-purchase-qty"
+                        type="number"
+                        placeholder="0"
+                        className="flex-1 border-gray-300 focus-visible:ring-[#1D9E75]"
+                      />
+                      <Select>
+                        <SelectTrigger className="w-[150px] border-gray-300">
+                          <SelectValue placeholder="Unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="kg">kg</SelectItem>
+                          <SelectItem value="metric-tonne">Metric tonne (MT)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="short-desc" className="text-sm font-medium text-gray-700">
-                      Short description
+                      Description
                     </Label>
-                    <Input
+                    <Textarea
                       id="short-desc"
                       placeholder="Brief product description"
-                      className="border-gray-300 focus-visible:ring-[#1D9E75]"
+                      className="border-gray-300 focus-visible:ring-[#1D9E75] min-h-[40px]"
                     />
                   </div>
                 </div>
 
                 {/* Image Upload Area */}
                 <div className="mt-4">
-                  <div className="flex h-32 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-[#1D9E75] hover:bg-[#E1F5EE]/30">
-                    <div className="flex flex-col items-center gap-2 text-gray-400">
-                      <Upload className="h-8 w-8" />
+                  <Label className="text-sm font-medium text-gray-700 mb-2 block">Product images</Label>
+                  <div className="flex h-28 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-[#1D9E75] hover:bg-[#E1F5EE]/30">
+                    <div className="flex flex-col items-center gap-1.5 text-gray-400">
+                      <Upload className="h-6 w-6" />
                       <p className="text-sm font-medium">Drag & drop images</p>
                       <p className="text-xs">or click to browse</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Document Upload */}
+                <div className="mt-4">
+                  <Label className="text-sm font-medium text-gray-700 mb-2 block">Product documents</Label>
+                  <p className="text-xs text-gray-400 mb-2">Upload certificates, lab results, or quality reports (optional)</p>
+                  <div className="flex h-20 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-[#1D9E75] hover:bg-[#E1F5EE]/30">
+                    <div className="flex flex-col items-center gap-1 text-gray-400">
+                      <Upload className="h-5 w-5" />
+                      <p className="text-xs font-medium">Upload documents</p>
                     </div>
                   </div>
                 </div>
@@ -263,20 +363,193 @@ export function SellerDashboardPage() {
               </CardHeader>
               <CardContent>
                 <p className="mb-4 text-sm text-gray-500">
-                  Upload a CSV file to configure shipping rates for different regions and weight
-                  brackets. The CSV should include columns for destination state, weight range (kg),
-                  and rate (₦). Use the template below to ensure the correct format.
+                  Upload a CSV file to configure shipping rates for different destinations. The rates you set here will automatically show your available regions to buyers.
                 </p>
+
+                {/* Sample CSV Templates */}
+                <div className="mb-5 space-y-3">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Sample CSV templates</p>
+
+                  {/* Weight vs Destination */}
+                  <div className="rounded-lg border border-gray-200">
+                    <button
+                      onClick={() => toggleTemplate('weight')}
+                      className="flex w-full items-center justify-between p-3 text-left"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FileSpreadsheet className="h-4 w-4 text-[#1D9E75]" />
+                        <span className="text-sm font-medium text-gray-700">Weight v. Destination</span>
+                      </div>
+                      {expandedTemplate === 'weight' ? (
+                        <ChevronUp className="h-4 w-4 text-gray-400" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-gray-400" />
+                      )}
+                    </button>
+                    {expandedTemplate === 'weight' && (
+                      <div className="border-t border-gray-200 p-3 bg-gray-50">
+                        <pre className="text-xs text-gray-600 overflow-x-auto">{`destination_state,weight_min_kg,weight_max_kg,rate_naira
+Lagos,0,50,1500
+Lagos,50,200,2800
+Lagos,200,1000,4500
+Abuja,0,50,2000
+Abuja,50,200,3500
+Kano,0,50,1800
+Kano,50,200,3200`}</pre>
+                        <Button variant="outline" size="sm" className="mt-2 text-xs border-gray-300">
+                          <Download className="mr-1 h-3 w-3" />
+                          Download template
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Price vs Destination */}
+                  <div className="rounded-lg border border-gray-200">
+                    <button
+                      onClick={() => toggleTemplate('price')}
+                      className="flex w-full items-center justify-between p-3 text-left"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FileSpreadsheet className="h-4 w-4 text-[#1D9E75]" />
+                        <span className="text-sm font-medium text-gray-700">Price v. Destination</span>
+                      </div>
+                      {expandedTemplate === 'price' ? (
+                        <ChevronUp className="h-4 w-4 text-gray-400" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-gray-400" />
+                      )}
+                    </button>
+                    {expandedTemplate === 'price' && (
+                      <div className="border-t border-gray-200 p-3 bg-gray-50">
+                        <pre className="text-xs text-gray-600 overflow-x-auto">{`destination_state,order_value_min,order_value_max,rate_naira
+Lagos,0,50000,1500
+Lagos,50000,200000,2500
+Lagos,200000,1000000,4000
+Abuja,0,50000,2000
+Abuja,50000,200000,3200
+Kano,0,50000,1800`}</pre>
+                        <Button variant="outline" size="sm" className="mt-2 text-xs border-gray-300">
+                          <Download className="mr-1 h-3 w-3" />
+                          Download template
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Number of Items vs Destination */}
+                  <div className="rounded-lg border border-gray-200">
+                    <button
+                      onClick={() => toggleTemplate('items')}
+                      className="flex w-full items-center justify-between p-3 text-left"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FileSpreadsheet className="h-4 w-4 text-[#1D9E75]" />
+                        <span className="text-sm font-medium text-gray-700">Number of Items v. Destination</span>
+                      </div>
+                      {expandedTemplate === 'items' ? (
+                        <ChevronUp className="h-4 w-4 text-gray-400" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-gray-400" />
+                      )}
+                    </button>
+                    {expandedTemplate === 'items' && (
+                      <div className="border-t border-gray-200 p-3 bg-gray-50">
+                        <pre className="text-xs text-gray-600 overflow-x-auto">{`destination_state,items_min,items_max,rate_naira
+Lagos,1,5,1200
+Lagos,6,20,2000
+Lagos,21,100,3500
+Abuja,1,5,1500
+Abuja,6,20,2500
+Kano,1,5,1400`}</pre>
+                        <Button variant="outline" size="sm" className="mt-2 text-xs border-gray-300">
+                          <Download className="mr-1 h-3 w-3" />
+                          Download template
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 <div className="flex flex-wrap gap-3">
-                  <Button variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50">
-                    <Download className="mr-2 h-4 w-4" />
-                    Download CSV template
-                  </Button>
                   <Button className="bg-[#1D9E75] text-white hover:bg-[#0F6E56]">
                     <Upload className="mr-2 h-4 w-4" />
                     Upload shipping CSV
                   </Button>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Profile Card with City/State */}
+            <Card className="border-gray-200">
+              <CardHeader className="pb-3">
+                <div className="flex items-center gap-2">
+                  <User className="h-5 w-5 text-[#1D9E75]" />
+                  <CardTitle className="text-lg font-bold text-gray-900">Profile & Location</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-500 mb-4">
+                  Your location is synced to all your products and helps buyers filter by area.
+                </p>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="business-name" className="text-sm font-medium text-gray-700">
+                      Business name
+                    </Label>
+                    <Input
+                      id="business-name"
+                      defaultValue="Aminu Farms Ltd."
+                      className="border-gray-300 focus-visible:ring-[#1D9E75]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                      Email
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      defaultValue="aminu@farms.com"
+                      className="border-gray-300 focus-visible:ring-[#1D9E75]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="state" className="text-sm font-medium text-gray-700">
+                      State
+                    </Label>
+                    <Select defaultValue="Kano">
+                      <SelectTrigger className="w-full border-gray-300 focus:ring-[#1D9E75]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {LOCATIONS.map((loc) => (
+                          <SelectItem key={loc.state} value={loc.state}>{loc.state}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="city" className="text-sm font-medium text-gray-700">
+                      City
+                    </Label>
+                    <Select defaultValue="Kano City">
+                      <SelectTrigger className="w-full border-gray-300 focus:ring-[#1D9E75]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Kano City">Kano City</SelectItem>
+                        <SelectItem value="Fagge">Fagge</SelectItem>
+                        <SelectItem value="Dala">Dala</SelectItem>
+                        <SelectItem value="Gwale">Gwale</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <Separator className="my-4" />
+                <Button className="bg-[#1D9E75] text-white hover:bg-[#0F6E56]">
+                  Save profile
+                </Button>
               </CardContent>
             </Card>
           </main>
