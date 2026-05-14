@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ShoppingCart, Receipt, ShieldCheck, Truck, CircleCheck, Wheat, X, Info, Leaf, Fish, Warehouse, Package } from 'lucide-react'
+import { ShoppingCart, Receipt, ShieldCheck, Truck, CircleCheck, Wheat, X, Info, Leaf, Fish, Package } from 'lucide-react'
 import { useAgrimarketStore } from '@/store/agrimarket-store'
 
 const PRODUCT_ICONS: Record<string, React.ReactNode> = {
@@ -23,7 +23,6 @@ const PRODUCT_ICONS: Record<string, React.ReactNode> = {
   barley: <Wheat className="h-5 w-5 text-yellow-700" />,
   leaf: <Leaf className="h-5 w-5 text-green-600" />,
   fish: <Fish className="h-5 w-5 text-sky-600" />,
-  warehouse: <Warehouse className="h-5 w-5 text-purple-600" />,
   package: <Package className="h-5 w-5 text-teal-600" />,
 }
 
@@ -112,7 +111,7 @@ export function CartCheckoutPage() {
 
   // Calculate subtotal
   const subtotal = useMemo(() => {
-    return cartItems.reduce((sum, item) => sum + item.pricePerUnit * item.quantity, 0)
+    return cartItems.reduce((sum, item) => sum + item.pricePerUnit * item.weight, 0)
   }, [cartItems])
 
   const totalShipping = useMemo(() => {
@@ -141,7 +140,7 @@ export function CartCheckoutPage() {
       {/* Wireframe Disclaimer */}
       <div className="mb-4 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5">
         <p className="text-center text-xs text-amber-800 font-medium">
-          ⚠️ This is a wireframe prototype. Cart and checkout flows are for demonstration only.
+          ⚠️ This is a wireframe prototype. Cart and checkout flows are for demonstration only. All products are sold by weight (kg or metric tonne) — no item-based quantity.
         </p>
       </div>
 
@@ -231,15 +230,15 @@ export function CartCheckoutPage() {
                               </p>
                             </div>
 
-                            {/* Quantity */}
+                            {/* Weight */}
                             <div className="shrink-0 text-right">
-                              <p className="text-sm font-medium text-gray-700">{item.quantity} {item.unit === 'metric-tonne' ? 'MT' : 'kg'}</p>
+                              <p className="text-sm font-medium text-gray-700">{item.weight} {item.unit === 'metric-tonne' ? 'MT' : 'kg'}</p>
                             </div>
 
                             {/* Line Total */}
                             <div className="shrink-0 text-right">
                               <p className="text-sm font-bold" style={{ color: sellerAccentDark }}>
-                                ₦{(item.pricePerUnit * item.quantity).toLocaleString()}
+                                ₦{(item.pricePerUnit * item.weight).toLocaleString()}
                               </p>
                             </div>
 
@@ -366,10 +365,10 @@ export function CartCheckoutPage() {
                   <div key={item.id} className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">
                       {item.name}{' '}
-                      <span className="text-gray-400">{item.quantity}{item.unit === 'metric-tonne' ? 'MT' : 'kg'}</span>
+                      <span className="text-gray-400">{item.weight}{item.unit === 'metric-tonne' ? 'MT' : 'kg'}</span>
                     </span>
                     <span className="text-sm font-medium text-gray-800">
-                      ₦{(item.pricePerUnit * item.quantity).toLocaleString()}
+                      ₦{(item.pricePerUnit * item.weight).toLocaleString()}
                     </span>
                   </div>
                 ))}

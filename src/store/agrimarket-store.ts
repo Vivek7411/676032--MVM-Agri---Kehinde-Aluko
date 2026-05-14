@@ -38,7 +38,7 @@ export interface CartItem {
   sellerLocation: string
   pricePerUnit: number
   unit: UnitOfMeasure
-  quantity: number
+  weight: number
   icon: string
   category: string
   subCategory: string
@@ -53,8 +53,8 @@ export interface Product {
   sellerId: string
   price: number
   unit: UnitOfMeasure
-  minQty: number
-  available: number
+  minWeight: number
+  availableWeight: number
   category: string
   subCategory: string
   productType: string
@@ -122,21 +122,6 @@ export const CATEGORIES: Category[] = [
       },
     ],
   },
-  {
-    id: 'warehouse',
-    name: 'Warehouse',
-    icon: 'warehouse',
-    subcategories: [
-      {
-        id: 'storage',
-        name: 'Storage',
-        types: [
-          { id: 'cold-storage', name: 'Cold Storage' },
-          { id: 'dry-storage', name: 'Dry Storage' },
-        ],
-      },
-    ],
-  },
 
 ]
 
@@ -160,8 +145,8 @@ export const PRODUCTS: Product[] = [
     sellerId: 'seller-a',
     price: 450,
     unit: 'kg',
-    minQty: 50,
-    available: 100,
+    minWeight: 50,
+    availableWeight: 100,
     category: 'produce',
     subCategory: 'crops',
     productType: 'wheat',
@@ -176,8 +161,8 @@ export const PRODUCTS: Product[] = [
     sellerId: 'seller-b',
     price: 320,
     unit: 'kg',
-    minQty: 100,
-    available: 400,
+    minWeight: 100,
+    availableWeight: 400,
     category: 'produce',
     subCategory: 'crops',
     productType: 'corn',
@@ -192,8 +177,8 @@ export const PRODUCTS: Product[] = [
     sellerId: 'seller-b',
     price: 280,
     unit: 'kg',
-    minQty: 200,
-    available: 800,
+    minWeight: 200,
+    availableWeight: 800,
     category: 'produce',
     subCategory: 'crops',
     productType: 'barley',
@@ -208,8 +193,8 @@ export const PRODUCTS: Product[] = [
     sellerId: 'seller-a',
     price: 180,
     unit: 'kg',
-    minQty: 25,
-    available: 200,
+    minWeight: 25,
+    availableWeight: 200,
     category: 'produce',
     subCategory: 'vegetables',
     productType: 'tomatoes',
@@ -224,8 +209,8 @@ export const PRODUCTS: Product[] = [
     sellerId: 'seller-c',
     price: 3500,
     unit: 'kg',
-    minQty: 10,
-    available: 500,
+    minWeight: 10,
+    availableWeight: 500,
     category: 'livestock',
     subCategory: 'poultry',
     productType: 'chickens',
@@ -240,8 +225,8 @@ export const PRODUCTS: Product[] = [
     sellerId: 'seller-d',
     price: 12500,
     unit: 'metric-tonne',
-    minQty: 1,
-    available: 50,
+    minWeight: 1,
+    availableWeight: 50,
     category: 'produce',
     subCategory: 'crops',
     productType: 'corn',
@@ -256,30 +241,15 @@ export const PRODUCTS: Product[] = [
     sellerId: 'seller-d',
     price: 8500,
     unit: 'metric-tonne',
-    minQty: 1,
-    available: 30,
+    minWeight: 1,
+    availableWeight: 30,
     category: 'produce',
     subCategory: 'crops',
     productType: 'corn',
     description: 'High-yield hybrid corn seeds for commercial planting. Priced per metric tonne.',
     icon: 'package',
   },
-  {
-    id: 'cold-storage-lagos',
-    name: 'Cold Storage Facility — Lagos',
-    seller: 'StoreRight NG',
-    sellerLocation: 'Lagos, Nigeria',
-    sellerId: 'seller-e',
-    price: 500,
-    unit: 'metric-tonne',
-    minQty: 1,
-    available: 100,
-    category: 'warehouse',
-    subCategory: 'storage',
-    productType: 'cold-storage',
-    description: 'Temperature-controlled warehouse space available for perishable goods storage in Lagos.',
-    icon: 'warehouse',
-  },
+
 ]
 
 // Filter state
@@ -333,7 +303,7 @@ export const useAgrimarketStore = create<AgrimarketState>((set) => ({
       sellerLocation: 'Kano',
       pricePerUnit: 450,
       unit: 'kg',
-      quantity: 50,
+      weight: 50,
       icon: 'wheat',
       category: 'produce',
       subCategory: 'crops',
@@ -347,7 +317,7 @@ export const useAgrimarketStore = create<AgrimarketState>((set) => ({
       sellerLocation: 'Lagos',
       pricePerUnit: 320,
       unit: 'kg',
-      quantity: 200,
+      weight: 200,
       icon: 'grain',
       category: 'produce',
       subCategory: 'crops',
@@ -361,7 +331,7 @@ export const useAgrimarketStore = create<AgrimarketState>((set) => ({
       sellerLocation: 'Lagos',
       pricePerUnit: 280,
       unit: 'kg',
-      quantity: 300,
+      weight: 300,
       icon: 'barley',
       category: 'produce',
       subCategory: 'crops',

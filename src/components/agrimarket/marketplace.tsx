@@ -18,7 +18,6 @@ import {
   Search,
   TrendingUp,
   LayoutGrid,
-  Warehouse,
   Package,
   X,
   SlidersHorizontal,
@@ -31,7 +30,6 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   wheat: <Wheat className="h-8 w-8" />,
   leaf: <Leaf className="h-8 w-8" />,
   fish: <Fish className="h-8 w-8" />,
-  warehouse: <Warehouse className="h-8 w-8" />,
   package: <Package className="h-8 w-8" />,
 }
 
@@ -39,7 +37,6 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
   wheat: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
   leaf: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
   fish: { bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-200' },
-  warehouse: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
   package: { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200' },
 }
 
@@ -49,7 +46,6 @@ const PRODUCT_ICONS: Record<string, React.ReactNode> = {
   barley: <Wheat className="h-12 w-12 text-yellow-700" />,
   leaf: <Leaf className="h-12 w-12 text-green-600" />,
   fish: <Fish className="h-12 w-12 text-sky-600" />,
-  warehouse: <Warehouse className="h-12 w-12 text-purple-600" />,
   package: <Package className="h-12 w-12 text-teal-600" />,
 }
 
@@ -390,7 +386,7 @@ export function MarketplacePage() {
       {/* Wireframe Disclaimer */}
       <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5">
         <p className="text-center text-xs text-amber-800 font-medium">
-          ⚠️ This is a wireframe prototype for demonstration purposes only. The final implementation may vary in design and functionality.
+          ⚠️ This is a wireframe prototype for demonstration purposes only. All products on this marketplace are sold by weight (kg or metric tonne) only — there is no item-based quantity.
         </p>
       </div>
 
@@ -411,7 +407,7 @@ export function MarketplacePage() {
             Nigeria&apos;s bulk agricultural marketplace
           </h1>
           <p className="mx-auto mb-8 max-w-2xl text-base text-[#0F6E56]/80 sm:text-lg">
-            Buy directly from farmers and aggregators · Weight-based quantities · Simple delivery
+            Buy directly from farmers and aggregators · Sold by weight (kg / metric tonne) · Simple delivery
           </p>
 
           {/* Search Bar */}
@@ -482,7 +478,7 @@ export function MarketplacePage() {
                   <LayoutGrid className="h-5 w-5 text-[#1D9E75]" />
                   <h2 className="text-xl font-bold text-gray-900">Browse by category</h2>
                 </div>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {CATEGORIES.map((category) => {
                     const colors = CATEGORY_COLORS[category.icon] ?? {
                       bg: 'bg-gray-50',
@@ -595,10 +591,10 @@ export function MarketplacePage() {
                               className="border-amber-300 bg-amber-50 text-amber-700 text-[10px]"
                               variant="outline"
                             >
-                              Min. {product.minQty} {product.unit === 'metric-tonne' ? 'MT' : 'kg'}
+                              Min. {product.minWeight} {product.unit === 'metric-tonne' ? 'MT' : 'kg'}
                             </Badge>
                             <span className="text-[10px] text-gray-400">
-                              {product.available.toLocaleString()} {product.unit === 'metric-tonne' ? 'MT' : 'kg'} available
+                              {product.availableWeight.toLocaleString()} {product.unit === 'metric-tonne' ? 'MT' : 'kg'} available
                             </span>
                           </CardFooter>
                         </Card>

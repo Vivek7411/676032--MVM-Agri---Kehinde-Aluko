@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Wheat, Info, Store, ShieldCheck, ArrowLeft, Plus, Leaf, Fish, Warehouse, Package } from 'lucide-react'
+import { Wheat, Info, Store, ShieldCheck, ArrowLeft, Plus, Leaf, Fish, Package } from 'lucide-react'
 import { useAgrimarketStore, PRODUCTS, CATEGORIES } from '@/store/agrimarket-store'
 import type { UnitOfMeasure } from '@/store/agrimarket-store'
 
@@ -24,7 +24,6 @@ const PRODUCT_ICONS: Record<string, React.ReactNode> = {
   barley: <Wheat className="h-16 w-16" style={{ color: '#a16207' }} />,
   leaf: <Leaf className="h-16 w-16" style={{ color: '#16a34a' }} />,
   fish: <Fish className="h-16 w-16" style={{ color: '#0284c7' }} />,
-  warehouse: <Warehouse className="h-16 w-16" style={{ color: '#7c3aed' }} />,
   package: <Package className="h-16 w-16" style={{ color: '#0d9488' }} />,
 }
 
@@ -34,7 +33,6 @@ const THUMB_ICONS: Record<string, React.ReactNode> = {
   barley: <Wheat className="h-5 w-5" style={{ color: '#ca8a04' }} />,
   leaf: <Leaf className="h-5 w-5" style={{ color: '#22c55e' }} />,
   fish: <Fish className="h-5 w-5" style={{ color: '#38bdf8' }} />,
-  warehouse: <Warehouse className="h-5 w-5" style={{ color: '#a78bfa' }} />,
   package: <Package className="h-5 w-5" style={{ color: '#2dd4bf' }} />,
 }
 
@@ -46,8 +44,8 @@ export function ProductDetailPage() {
   // Look up product by ID
   const product = PRODUCTS.find((p) => p.id === selectedProduct) ?? PRODUCTS[0]
 
-  const defaultQty = product.minQty
-  const [quantity, setQuantity] = useState<string>(String(defaultQty))
+  const defaultWeight = product.minWeight
+  const [weight, setWeight] = useState<string>(String(defaultWeight))
   const [unit, setUnit] = useState<UnitOfMeasure>(product.unit)
 
   // Get category labels
@@ -71,7 +69,7 @@ export function ProductDetailPage() {
       sellerLocation: product.sellerLocation,
       pricePerUnit: product.price,
       unit,
-      quantity: Number(quantity) || product.minQty,
+      weight: Number(weight) || product.minWeight,
       icon: product.icon,
       category: product.category,
       subCategory: product.subCategory,
@@ -156,19 +154,19 @@ export function ProductDetailPage() {
           {/* Info rows */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Available stock:</span>
+              <span className="text-sm font-medium text-gray-700">Available weight:</span>
               <Badge
                 className="font-semibold border-0"
                 style={{ backgroundColor: '#E1F5EE', color: '#0F6E56' }}
               >
-                {product.available} {unitShort}
+                {product.availableWeight} {unitShort}
               </Badge>
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Minimum purchase:</span>
+              <span className="text-sm font-medium text-gray-700">Minimum weight:</span>
               <Badge className="font-semibold border-0 bg-amber-50 text-amber-700">
-                {product.minQty} {unitShort}
+                {product.minWeight} {unitShort}
               </Badge>
             </div>
 
@@ -180,18 +178,18 @@ export function ProductDetailPage() {
 
           <Separator />
 
-          {/* Quantity input */}
+          {/* Weight input */}
           <div className="space-y-2">
-            <Label htmlFor="quantity" className="text-sm font-medium text-gray-700">
-              Quantity
+            <Label htmlFor="weight" className="text-sm font-medium text-gray-700">
+              Weight to order
             </Label>
             <div className="flex items-center gap-2">
               <Input
-                id="quantity"
+                id="weight"
                 type="number"
-                min={product.minQty}
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
+                min={product.minWeight}
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
                 className="flex-1"
               />
               <Select
@@ -210,7 +208,7 @@ export function ProductDetailPage() {
             <div className="flex items-start gap-1.5">
               <Info className="h-3.5 w-3.5 mt-0.5" style={{ color: '#5DCAA5' }} />
               <p className="text-xs text-gray-500">
-                Minimum quantity is {product.minQty} {unitShort}. 1 metric tonne = 1,000 kg
+                Minimum order weight is {product.minWeight} {unitShort}. 1 metric tonne = 1,000 kg. All products are sold by weight only.
               </p>
             </div>
           </div>

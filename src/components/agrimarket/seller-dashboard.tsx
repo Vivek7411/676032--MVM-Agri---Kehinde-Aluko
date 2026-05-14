@@ -47,7 +47,7 @@ const STATS = [
   { label: 'Total orders', value: '38', icon: ShoppingBag },
   { label: 'Pending payouts', value: '₦184k', icon: Wallet },
   { label: 'Active listings', value: '12', icon: Package },
-  { label: 'Stock kg', value: '1,420', icon: Wheat },
+  { label: 'Stock weight', value: '1,420 kg', icon: Wheat },
 ] as const
 
 const PRODUCTS_TABLE = [
@@ -137,8 +137,8 @@ export function SellerDashboardPage() {
                     <thead>
                       <tr className="border-b text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
                         <th className="pb-3 pr-4">Product</th>
-                        <th className="pb-3 pr-4">Stock</th>
-                        <th className="pb-3 pr-4">Min qty</th>
+                        <th className="pb-3 pr-4">Stock weight</th>
+                        <th className="pb-3 pr-4">Min weight</th>
                         <th className="pb-3 pr-4">Unit</th>
                         <th className="pb-3">Status</th>
                       </tr>
@@ -218,8 +218,6 @@ export function SellerDashboardPage() {
                         <SelectItem value="fruits">Fruits</SelectItem>
                         <SelectItem value="poultry">Poultry</SelectItem>
                         <SelectItem value="cattle">Cattle</SelectItem>
-                        <SelectItem value="storage">Storage</SelectItem>
-                        <SelectItem value="transport">Transport</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -263,12 +261,12 @@ export function SellerDashboardPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="available-qty" className="text-sm font-medium text-gray-700">
-                      Available quantity
+                    <Label htmlFor="available-weight" className="text-sm font-medium text-gray-700">
+                      Available weight
                     </Label>
                     <div className="flex gap-2">
                       <Input
-                        id="available-qty"
+                        id="available-weight"
                         type="number"
                         placeholder="0"
                         className="flex-1 border-gray-300 focus-visible:ring-[#1D9E75]"
@@ -285,12 +283,12 @@ export function SellerDashboardPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="min-purchase-qty" className="text-sm font-medium text-gray-700">
-                      Min purchase quantity
+                    <Label htmlFor="min-weight" className="text-sm font-medium text-gray-700">
+                      Min order weight
                     </Label>
                     <div className="flex gap-2">
                       <Input
-                        id="min-purchase-qty"
+                        id="min-weight"
                         type="number"
                         placeholder="0"
                         className="flex-1 border-gray-300 focus-visible:ring-[#1D9E75]"

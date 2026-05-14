@@ -269,7 +269,7 @@ export function AdminPanelPage() {
                       <th className="pb-2 pr-4 font-medium text-gray-500">Product</th>
                       <th className="pb-2 pr-4 font-medium text-gray-500">Seller</th>
                       <th className="pb-2 pr-4 font-medium text-gray-500">Status</th>
-                      <th className="pb-2 pr-4 font-medium text-gray-500">Quantity</th>
+                      <th className="pb-2 pr-4 font-medium text-gray-500">Weight</th>
                       <th className="pb-2 font-medium text-gray-500">Action</th>
                     </tr>
                   </thead>

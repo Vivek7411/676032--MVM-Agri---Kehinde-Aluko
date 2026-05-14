@@ -88,3 +88,36 @@ Stage Summary:
 - Logistics is no longer listed as a marketplace category (removed from browse/filter/hierarchy)
 - Logistics Dashboard remains accessible via the nav pill as an internal management tool
 - Marketplace now shows 3 categories: Produce, Livestock, Warehouse
+
+---
+Task ID: 4
+Agent: Main Agent
+Task: Remove Warehouse category completely, make all products sold by weight only (no quantity field), add disclaimers
+
+Work Log:
+- Removed Warehouse category from CATEGORIES array in store (was id: 'warehouse', icon: 'warehouse', with 'Storage' subcategory and 'Cold Storage' / 'Dry Storage' types)
+- Removed cold-storage-lagos product from PRODUCTS array (was the only warehouse product)
+- Removed all Warehouse icon references from marketplace.tsx, product-detail.tsx, cart-checkout.tsx
+- Renamed Product interface fields: minQty → minWeight, available → availableWeight
+- Renamed CartItem interface field: quantity → weight
+- Updated all product data in store to use new field names
+- Updated all components to use new field names (product.minWeight, product.availableWeight, item.weight)
+- Changed "Quantity" labels to "Weight" throughout: "Weight to order", "Available weight", "Min order weight", "Stock weight"
+- Changed "Available stock" → "Available weight", "Minimum purchase" → "Minimum weight"
+- Updated hero banner subtitle: "Sold by weight (kg / metric tonne)"
+- Updated marketplace category grid from 4 cols to 3 cols (only Produce, Livestock left)
+- Added weight-only disclaimers to:
+  - Marketplace wireframe disclaimer: "All products on this marketplace are sold by weight (kg or metric tonne) only — there is no item-based quantity."
+  - Cart checkout disclaimer: "All products are sold by weight (kg or metric tonne) — no item-based quantity."
+  - Product detail info text: "All products are sold by weight only."
+- Updated admin panel Product Approvals table header: "Quantity" → "Weight"
+- Updated seller dashboard: "Stock kg" stat → "Stock weight", table headers → "Stock weight" / "Min weight", form labels → "Available weight" / "Min order weight"
+- Removed Storage/Transport from seller add-product subcategory dropdown
+- Lint passes cleanly, app compiles without errors
+
+Stage Summary:
+- Warehouse category completely removed — no longer browseable or filterable
+- Marketplace now shows only 2 categories: Produce and Livestock
+- All products sold by weight only (kg or metric tonne) — no item/quantity concept anywhere
+- Weight-only disclaimers added to marketplace, product detail, and cart
+- All field names updated: minQty→minWeight, available→availableWeight, quantity→weight
