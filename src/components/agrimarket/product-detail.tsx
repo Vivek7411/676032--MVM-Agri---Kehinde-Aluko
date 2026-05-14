@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Wheat, Info, Store, ShieldCheck, ArrowLeft, Plus, Leaf, Fish, Package } from 'lucide-react'
+import { Wheat, Info, Store, ArrowLeft, Plus, Leaf, Fish, Package } from 'lucide-react'
 import { useAgrimarketStore, PRODUCTS, CATEGORIES } from '@/store/agrimarket-store'
 import type { UnitOfMeasure } from '@/store/agrimarket-store'
 
@@ -241,8 +241,8 @@ export function ProductDetailPage({ onNavigate, onBack }: ProductDetailPageProps
             className="font-semibold border-0 shrink-0"
             style={{ backgroundColor: '#E1F5EE', color: '#0F6E56' }}
           >
-            <ShieldCheck className="h-3.5 w-3.5 mr-1" />
-            Verified
+            <Store className="h-3.5 w-3.5 mr-1" />
+            {product.seller}
           </Badge>
         </CardContent>
       </Card>

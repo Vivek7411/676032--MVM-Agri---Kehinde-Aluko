@@ -60,7 +60,17 @@ export function AdminPanelPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [productReviewMode, setProductReviewMode] = useState<'manual' | 'auto'>('manual')
   const [commissionDefault, setCommissionDefault] = useState('10')
-  const [commissionOverrideSeller, setCommissionOverrideSeller] = useState('')
+  const [sellerCommissions, setSellerCommissions] = useState<Record<string, string>>({
+    'aminu-farms': '10',
+    'delta-agro': '10',
+    'oyo-poultry': '12',
+    'greeninput': '8',
+  })
+  const [logisticsCommissions, setLogisticsCommissions] = useState<Record<string, string>>({
+    'fastlogix': '15',
+    'swiftcargo': '15',
+    'haulpro': '12',
+  })
   const [taxTreatment, setTaxTreatment] = useState<'included-in-commission' | 'given-to-admin'>('included-in-commission')
   const [shippingToggles, setShippingToggles] = useState<Record<string, boolean>>({
     'aminu-farms': true,
@@ -513,17 +523,18 @@ export function AdminPanelPage() {
 
           {/* ==================== COMMISSION SETTINGS ==================== */}
           {activeItem === 'commission-settings' && (
-            <Card className="border border-gray-200">
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-base font-semibold text-gray-900">
-                  <Percent className="h-5 w-5" style={{ color: '#1D9E75' }} />
-                  Commission & tax settings
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="mb-1.5 block text-sm font-medium text-gray-700">Default commission</label>
+            <div className="space-y-6">
+              {/* Default Commission */}
+              <Card className="border border-gray-200">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-base font-semibold text-gray-900">
+                    <Percent className="h-5 w-5" style={{ color: '#1D9E75' }} />
+                    Default commission
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="max-w-xs">
+                    <label className="mb-1.5 block text-sm font-medium text-gray-700">Default platform commission</label>
                     <div className="relative">
                       <Input
                         type="number"
@@ -533,28 +544,202 @@ export function AdminPanelPage() {
                       />
                       <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">%</span>
                     </div>
+                    <p className="mt-2 text-xs text-gray-500">Applied to all sellers and logistics providers unless overridden below.</p>
                   </div>
-                  <div>
-                    <label className="mb-1.5 block text-sm font-medium text-gray-700">Per-seller override</label>
-                    <Select value={commissionOverrideSeller} onValueChange={setCommissionOverrideSeller}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select seller" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="seller-a">Seller A</SelectItem>
-                        <SelectItem value="seller-b">Seller B</SelectItem>
-                        <SelectItem value="aminu-farms">Aminu Farms Ltd.</SelectItem>
-                        <SelectItem value="delta-agro">Delta Agro Co.</SelectItem>
-                      </SelectContent>
-                    </Select>
+                </CardContent>
+              </Card>
+
+              {/* Per-Seller Commission */}
+              <Card className="border border-gray-200">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-base font-semibold text-gray-900">
+                    <UserCheck className="h-5 w-5" style={{ color: '#1D9E75' }} />
+                    Per-seller commission
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500 mb-4">Override the default commission rate for individual sellers. Leave blank to use the default rate.</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-100 text-left">
+                          <th className="pb-2 pr-4 font-medium text-gray-500">Seller</th>
+                          <th className="pb-2 pr-4 font-medium text-gray-500">Location</th>
+                          <th className="pb-2 pr-4 font-medium text-gray-500">Type</th>
+                          <th className="pb-2 font-medium text-gray-500">Commission %</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-gray-50">
+                          <td className="py-3 pr-4 font-medium text-gray-900">Aminu Farms Ltd.</td>
+                          <td className="py-3 pr-4 text-gray-500">Kano</td>
+                          <td className="py-3 pr-4">
+                            <Badge className="border-0 text-xs font-medium" style={{ backgroundColor: '#E6F1FB', color: '#185FA5' }}>Farmer</Badge>
+                          </td>
+                          <td className="py-3">
+                            <div className="relative w-24">
+                              <Input
+                                type="number"
+                                value={sellerCommissions['aminu-farms']}
+                                onChange={(e) => setSellerCommissions({ ...sellerCommissions, 'aminu-farms': e.target.value })}
+                                className="pr-8 h-8 text-sm"
+                              />
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400">%</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-gray-50">
+                          <td className="py-3 pr-4 font-medium text-gray-900">Delta Agro Co.</td>
+                          <td className="py-3 pr-4 text-gray-500">Lagos</td>
+                          <td className="py-3 pr-4">
+                            <Badge className="border-0 text-xs font-medium" style={{ backgroundColor: '#FEF3C7', color: '#92400E' }}>Aggregator</Badge>
+                          </td>
+                          <td className="py-3">
+                            <div className="relative w-24">
+                              <Input
+                                type="number"
+                                value={sellerCommissions['delta-agro']}
+                                onChange={(e) => setSellerCommissions({ ...sellerCommissions, 'delta-agro': e.target.value })}
+                                className="pr-8 h-8 text-sm"
+                              />
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400">%</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-gray-50">
+                          <td className="py-3 pr-4 font-medium text-gray-900">Oyo Poultry Farm</td>
+                          <td className="py-3 pr-4 text-gray-500">Oyo</td>
+                          <td className="py-3 pr-4">
+                            <Badge className="border-0 text-xs font-medium" style={{ backgroundColor: '#E6F1FB', color: '#185FA5' }}>Farmer</Badge>
+                          </td>
+                          <td className="py-3">
+                            <div className="relative w-24">
+                              <Input
+                                type="number"
+                                value={sellerCommissions['oyo-poultry']}
+                                onChange={(e) => setSellerCommissions({ ...sellerCommissions, 'oyo-poultry': e.target.value })}
+                                className="pr-8 h-8 text-sm"
+                              />
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400">%</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="py-3 pr-4 font-medium text-gray-900">GreenInput Ltd.</td>
+                          <td className="py-3 pr-4 text-gray-500">Lagos</td>
+                          <td className="py-3 pr-4">
+                            <Badge className="border-0 text-xs font-medium" style={{ backgroundColor: '#E1F5EE', color: '#0F6E56' }}>Input Supplier</Badge>
+                          </td>
+                          <td className="py-3">
+                            <div className="relative w-24">
+                              <Input
+                                type="number"
+                                value={sellerCommissions['greeninput']}
+                                onChange={(e) => setSellerCommissions({ ...sellerCommissions, 'greeninput': e.target.value })}
+                                className="pr-8 h-8 text-sm"
+                              />
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400">%</span>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                </div>
+                  <Button className="mt-4 bg-[#1D9E75] text-white hover:bg-[#0F6E56]">Save seller commissions</Button>
+                </CardContent>
+              </Card>
 
-                <Separator className="my-5" />
+              {/* Per-Logistics Provider Commission */}
+              <Card className="border border-gray-200">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-base font-semibold text-gray-900">
+                    <Truck className="h-5 w-5" style={{ color: '#1D9E75' }} />
+                    Per-logistics provider commission
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500 mb-4">Set the commission rate for each logistics provider. This is the platform&apos;s cut from delivery fees.</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-100 text-left">
+                          <th className="pb-2 pr-4 font-medium text-gray-500">Provider</th>
+                          <th className="pb-2 pr-4 font-medium text-gray-500">Base location</th>
+                          <th className="pb-2 pr-4 font-medium text-gray-500">Vehicle type</th>
+                          <th className="pb-2 font-medium text-gray-500">Commission %</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-gray-50">
+                          <td className="py-3 pr-4 font-medium text-gray-900">FastLogix NG</td>
+                          <td className="py-3 pr-4 text-gray-500">Lagos</td>
+                          <td className="py-3 pr-4">
+                            <Badge className="border-0 text-xs font-medium" style={{ backgroundColor: '#E6F1FB', color: '#185FA5' }}>Truck</Badge>
+                          </td>
+                          <td className="py-3">
+                            <div className="relative w-24">
+                              <Input
+                                type="number"
+                                value={logisticsCommissions['fastlogix']}
+                                onChange={(e) => setLogisticsCommissions({ ...logisticsCommissions, 'fastlogix': e.target.value })}
+                                className="pr-8 h-8 text-sm"
+                              />
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400">%</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr className="border-b border-gray-50">
+                          <td className="py-3 pr-4 font-medium text-gray-900">SwiftCargo NG</td>
+                          <td className="py-3 pr-4 text-gray-500">Abuja</td>
+                          <td className="py-3 pr-4">
+                            <Badge className="border-0 text-xs font-medium" style={{ backgroundColor: '#FEF3C7', color: '#92400E' }}>Van</Badge>
+                          </td>
+                          <td className="py-3">
+                            <div className="relative w-24">
+                              <Input
+                                type="number"
+                                value={logisticsCommissions['swiftcargo']}
+                                onChange={(e) => setLogisticsCommissions({ ...logisticsCommissions, 'swiftcargo': e.target.value })}
+                                className="pr-8 h-8 text-sm"
+                              />
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400">%</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="py-3 pr-4 font-medium text-gray-900">HaulPro Logistics</td>
+                          <td className="py-3 pr-4 text-gray-500">Kano</td>
+                          <td className="py-3 pr-4">
+                            <Badge className="border-0 text-xs font-medium" style={{ backgroundColor: '#E1F5EE', color: '#0F6E56' }}>Pickup</Badge>
+                          </td>
+                          <td className="py-3">
+                            <div className="relative w-24">
+                              <Input
+                                type="number"
+                                value={logisticsCommissions['haulpro']}
+                                onChange={(e) => setLogisticsCommissions({ ...logisticsCommissions, 'haulpro': e.target.value })}
+                                className="pr-8 h-8 text-sm"
+                              />
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400">%</span>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <Button className="mt-4 bg-[#1D9E75] text-white hover:bg-[#0F6E56]">Save logistics commissions</Button>
+                </CardContent>
+              </Card>
 
-                {/* Tax Treatment */}
-                <div>
-                  <p className="mb-3 text-sm font-medium text-gray-700">Tax (VAT) treatment</p>
+              {/* Tax Treatment */}
+              <Card className="border border-gray-200">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-base font-semibold text-gray-900">
+                    <Percent className="h-5 w-5" style={{ color: '#1D9E75' }} />
+                    Tax (VAT) treatment
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
                   <div className="space-y-3">
                     <label className={`flex cursor-pointer items-start gap-3 rounded-lg border-2 p-3 transition-colors ${taxTreatment === 'included-in-commission' ? 'border-[#1D9E75] bg-[#E1F5EE]/30' : 'border-gray-200 hover:border-gray-300'}`}>
                       <input type="radio" name="tax-treatment" value="included-in-commission" checked={taxTreatment === 'included-in-commission'} onChange={() => setTaxTreatment('included-in-commission')} className="mt-0.5 accent-[#1D9E75]" />
@@ -571,52 +756,52 @@ export function AdminPanelPage() {
                       </div>
                     </label>
                   </div>
-                </div>
 
-                <Separator className="my-5" />
+                  <Separator className="my-5" />
 
-                <div>
-                  <p className="mb-3 text-sm font-medium text-gray-700">Payout calculation example</p>
-                  <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Order total (incl. 7.5% VAT)</span>
-                      <span className="font-semibold text-gray-900">₦107,500</span>
-                    </div>
-                    <div className="mt-1 flex items-center justify-between text-sm">
-                      <span className="text-gray-500 text-xs">Pre-tax amount</span>
-                      <span className="text-xs text-gray-500">₦100,000</span>
-                    </div>
-                    <div className="mt-2 flex items-center justify-between text-sm">
-                      <span className="text-gray-600">VAT collected</span>
-                      <span className="font-semibold text-gray-900">₦7,500</span>
-                    </div>
-                    <div className="mt-2 flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Admin commission ({commissionDefault}%)</span>
-                      <span className="font-semibold text-gray-900">
-                        ₦{taxTreatment === 'included-in-commission'
-                          ? ((107500 * Number(commissionDefault)) / 100).toFixed(0)
-                          : ((100000 * Number(commissionDefault)) / 100).toFixed(0)}
-                      </span>
-                    </div>
-                    <Separator className="my-2" />
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium" style={{ color: '#0F6E56' }}>Seller payout</span>
-                      <span className="text-lg font-bold" style={{ color: '#1D9E75' }}>
-                        ₦{taxTreatment === 'included-in-commission'
-                          ? (107500 - (107500 * Number(commissionDefault)) / 100).toFixed(0)
-                          : (100000 - (100000 * Number(commissionDefault)) / 100).toFixed(0)}
-                      </span>
-                    </div>
-                    {taxTreatment === 'given-to-admin' && (
-                      <div className="mt-1 flex items-center justify-between text-sm">
-                        <span className="text-xs text-gray-400">Tax to platform</span>
-                        <span className="text-xs text-gray-400">₦7,500</span>
+                  <div>
+                    <p className="mb-3 text-sm font-medium text-gray-700">Payout calculation example</p>
+                    <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600">Order total (incl. 7.5% VAT)</span>
+                        <span className="font-semibold text-gray-900">₦107,500</span>
                       </div>
-                    )}
+                      <div className="mt-1 flex items-center justify-between text-sm">
+                        <span className="text-gray-500 text-xs">Pre-tax amount</span>
+                        <span className="text-xs text-gray-500">₦100,000</span>
+                      </div>
+                      <div className="mt-2 flex items-center justify-between text-sm">
+                        <span className="text-gray-600">VAT collected</span>
+                        <span className="font-semibold text-gray-900">₦7,500</span>
+                      </div>
+                      <div className="mt-2 flex items-center justify-between text-sm">
+                        <span className="text-gray-600">Admin commission ({commissionDefault}%)</span>
+                        <span className="font-semibold text-gray-900">
+                          ₦{taxTreatment === 'included-in-commission'
+                            ? ((107500 * Number(commissionDefault)) / 100).toFixed(0)
+                            : ((100000 * Number(commissionDefault)) / 100).toFixed(0)}
+                        </span>
+                      </div>
+                      <Separator className="my-2" />
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-medium" style={{ color: '#0F6E56' }}>Seller payout</span>
+                        <span className="text-lg font-bold" style={{ color: '#1D9E75' }}>
+                          ₦{taxTreatment === 'included-in-commission'
+                            ? (107500 - (107500 * Number(commissionDefault)) / 100).toFixed(0)
+                            : (100000 - (100000 * Number(commissionDefault)) / 100).toFixed(0)}
+                        </span>
+                      </div>
+                      {taxTreatment === 'given-to-admin' && (
+                        <div className="mt-1 flex items-center justify-between text-sm">
+                          <span className="text-xs text-gray-400">Tax to platform</span>
+                          <span className="text-xs text-gray-400">₦7,500</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           )}
 
           {/* ==================== SELLER PAYOUTS ==================== */}
