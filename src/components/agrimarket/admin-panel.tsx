@@ -5,13 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+
 import {
   LayoutDashboard,
   UserCheck,
@@ -874,86 +868,6 @@ export function AdminPanelPage() {
                 </CardContent>
               </Card>
 
-              {/* General Platform Settings */}
-              <Card className="border border-gray-200">
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center gap-2 text-base font-semibold text-gray-900">
-                    <Settings className="h-5 w-5" style={{ color: '#1D9E75' }} />
-                    General settings
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-5">
-                    {/* Marketplace visibility */}
-                    <div>
-                      <label className="mb-1.5 block text-sm font-medium text-gray-700">Marketplace visibility</label>
-                      <Select defaultValue="public">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="public">Public — anyone can browse</SelectItem>
-                          <SelectItem value="registered">Registered users only</SelectItem>
-                          <SelectItem value="invite">Invite-only</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Default currency */}
-                    <div>
-                      <label className="mb-1.5 block text-sm font-medium text-gray-700">Default currency</label>
-                      <Select defaultValue="ngn">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="ngn">Nigerian Naira (₦)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Minimum order value */}
-                    <div>
-                      <label className="mb-1.5 block text-sm font-medium text-gray-700">Minimum order value</label>
-                      <div className="relative">
-                        <Input type="number" defaultValue="5000" className="pr-10" />
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">₦</span>
-                      </div>
-                      <p className="mt-1 text-xs text-gray-400">Orders below this amount will not be accepted</p>
-                    </div>
-
-                    {/* Platform maintenance */}
-                    <div className="flex items-center justify-between rounded-lg border border-gray-200 p-4">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">Maintenance mode</p>
-                        <p className="text-xs text-gray-500">Temporarily disable the marketplace for all users</p>
-                      </div>
-                      <button className="flex items-center gap-2">
-                        <ToggleLeft className="h-6 w-6 text-gray-400" />
-                        <span className="text-xs text-gray-400 font-medium">Off</span>
-                      </button>
-                    </div>
-
-                    {/* Delivery confirmation */}
-                    <div className="flex items-center justify-between rounded-lg border border-gray-200 p-4">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">Require delivery confirmation</p>
-                        <p className="text-xs text-gray-500">Logistics providers must provide delivery proof before payout</p>
-                      </div>
-                      <button className="flex items-center gap-2">
-                        <ToggleRight className="h-6 w-6 text-[#1D9E75]" />
-                        <span className="text-xs text-[#0F6E56] font-medium">On</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="mt-6">
-                    <Button className="bg-[#1D9E75] text-white hover:bg-[#0F6E56]">
-                      Save settings
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           )}
 
