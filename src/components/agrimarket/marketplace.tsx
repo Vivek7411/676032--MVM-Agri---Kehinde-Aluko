@@ -24,6 +24,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { useAgrimarketStore, PRODUCTS, CATEGORIES, LOCATIONS, type FilterState } from '@/store/agrimarket-store'
+import { fmtNum } from '@/lib/utils'
 import { useState, useMemo } from 'react'
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
@@ -579,7 +580,7 @@ export function MarketplacePage({ onNavigate }: MarketplacePageProps) {
                             )}
                             <div className="mt-2 flex items-baseline gap-1">
                               <span className="text-xl font-bold text-[#1D9E75]">
-                                ₦{product.price.toLocaleString()}
+                                ₦{fmtNum(product.price)}
                               </span>
                               <span className="text-xs text-gray-500">
                                 /{product.unit === 'metric-tonne' ? 'metric tonne' : 'kg'}

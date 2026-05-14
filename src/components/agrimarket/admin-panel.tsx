@@ -34,7 +34,6 @@ import {
 } from 'lucide-react'
 import { useAgrimarketStore } from '@/store/agrimarket-store'
 import { useState } from 'react'
-import { useHydrated } from '@/hooks/use-hydrated'
 
 const SIDEBAR_ITEMS = [
   { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -78,8 +77,6 @@ export function AdminPanelPage() {
     'oyo-poultry': false,
     'greeninput': true,
   })
-  const hydrated = useHydrated()
-
   const activeItem = adminSidebarItem || 'dashboard'
 
   return (
@@ -92,18 +89,16 @@ export function AdminPanelPage() {
       </div>
 
       {/* Mobile menu toggle */}
-      {hydrated && (
-        <button
-          className="fixed top-10 left-4 z-50 rounded-lg bg-[#1D9E75] p-2 text-white shadow-lg md:hidden"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
-      )}
+      <button
+        className="fixed top-10 left-4 z-50 rounded-lg bg-[#1D9E75] p-2 text-white shadow-lg md:hidden"
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        aria-label="Toggle menu"
+      >
+        {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      </button>
 
       {/* Sidebar overlay for mobile */}
-      {hydrated && mobileMenuOpen && (
+      {mobileMenuOpen && (
         <div
           className="fixed inset-0 z-30 bg-black/40 md:hidden"
           onClick={() => setMobileMenuOpen(false)}
@@ -113,7 +108,7 @@ export function AdminPanelPage() {
       {/* Sidebar */}
       <aside
         className={`fixed top-8 left-0 z-40 h-full w-[200px] shrink-0 border-r border-gray-200 bg-white transition-transform duration-200 md:static md:translate-x-0 ${
-          hydrated && mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="p-4">

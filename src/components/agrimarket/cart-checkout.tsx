@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/select'
 import { ShoppingCart, Receipt, ShieldCheck, Truck, CircleCheck, Wheat, X, Info, Leaf, Fish, Package } from 'lucide-react'
 import { useAgrimarketStore } from '@/store/agrimarket-store'
+import { fmtNum } from '@/lib/utils'
 
 const PRODUCT_ICONS: Record<string, React.ReactNode> = {
   wheat: <Wheat className="h-5 w-5 text-[#1D9E75]" />,
@@ -226,7 +227,7 @@ export function CartCheckoutPage() {
                             <div className="min-w-0 flex-1">
                               <p className="truncate text-sm font-semibold text-gray-900">{item.name}</p>
                               <p className="text-xs text-gray-500">
-                                ₦{item.pricePerUnit.toLocaleString()}/{item.unit === 'metric-tonne' ? 'MT' : 'kg'}
+                                ₦{fmtNum(item.pricePerUnit)}/{item.unit === 'metric-tonne' ? 'MT' : 'kg'}
                               </p>
                             </div>
 
@@ -238,7 +239,7 @@ export function CartCheckoutPage() {
                             {/* Line Total */}
                             <div className="shrink-0 text-right">
                               <p className="text-sm font-bold" style={{ color: sellerAccentDark }}>
-                                ₦{(item.pricePerUnit * item.weight).toLocaleString()}
+                                ₦{fmtNum(item.pricePerUnit * item.weight)}
                               </p>
                             </div>
 
@@ -368,7 +369,7 @@ export function CartCheckoutPage() {
                       <span className="text-gray-400">{item.weight}{item.unit === 'metric-tonne' ? 'MT' : 'kg'}</span>
                     </span>
                     <span className="text-sm font-medium text-gray-800">
-                      ₦{(item.pricePerUnit * item.weight).toLocaleString()}
+                      ₦{fmtNum(item.pricePerUnit * item.weight)}
                     </span>
                   </div>
                 ))}
@@ -380,7 +381,7 @@ export function CartCheckoutPage() {
                       {label}
                     </span>
                     <span className="text-sm font-medium text-gray-800">
-                      ₦{cost.toLocaleString()}
+                      ₦{fmtNum(cost)}
                     </span>
                   </div>
                 ))}
@@ -390,7 +391,7 @@ export function CartCheckoutPage() {
                 {/* Subtotal */}
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Subtotal</span>
-                  <span className="text-sm font-medium text-gray-800">₦{subtotal.toLocaleString()}</span>
+                  <span className="text-sm font-medium text-gray-800">₦{fmtNum(subtotal)}</span>
                 </div>
 
                 {/* Tax */}
@@ -399,14 +400,14 @@ export function CartCheckoutPage() {
                     VAT (7.5%)
                   </span>
                   <span className="text-sm font-medium text-gray-800">
-                    ₦{tax.toLocaleString()}
+                    ₦{fmtNum(tax)}
                   </span>
                 </div>
 
                 {/* Shipping */}
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Shipping</span>
-                  <span className="text-sm font-medium text-gray-800">₦{totalShipping.toLocaleString()}</span>
+                  <span className="text-sm font-medium text-gray-800">₦{fmtNum(totalShipping)}</span>
                 </div>
 
                 <Separator className="my-2" />
@@ -415,7 +416,7 @@ export function CartCheckoutPage() {
                 <div className="flex items-center justify-between pt-1">
                   <span className="text-base font-bold text-gray-900">Total</span>
                   <span className="text-2xl font-bold text-[#1D9E75]">
-                    ₦{total.toLocaleString()}
+                    ₦{fmtNum(total)}
                   </span>
                 </div>
 

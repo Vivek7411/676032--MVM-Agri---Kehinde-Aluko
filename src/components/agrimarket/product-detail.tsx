@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/select'
 import { Wheat, Info, Store, ArrowLeft, Plus, Leaf, Fish, Package } from 'lucide-react'
 import { useAgrimarketStore, PRODUCTS, CATEGORIES } from '@/store/agrimarket-store'
+import { fmtNum } from '@/lib/utils'
 import type { UnitOfMeasure } from '@/store/agrimarket-store'
 
 const PRODUCT_ICONS: Record<string, React.ReactNode> = {
@@ -152,7 +153,7 @@ export function ProductDetailPage({ onNavigate, onBack }: ProductDetailPageProps
 
           {/* Price */}
           <p className="text-3xl font-bold" style={{ color: '#1D9E75' }}>
-            ₦{product.price.toLocaleString()}/{unitLabel}
+            ₦{fmtNum(product.price)}/{unitLabel}
           </p>
 
           <Separator />

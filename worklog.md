@@ -20,3 +20,26 @@ Stage Summary:
 - Browser back/forward buttons work correctly
 - Product detail page uses `?id=` param for product selection
 - "Publish URL" error was a platform deployment issue (not code) - just needs retry
+
+---
+Task ID: 2
+Agent: main
+Task: Fix React hydration error in AgriMarket Nigeria
+
+Work Log:
+- Identified root cause: `useHydrated` hook in admin-panel.tsx used `useSyncExternalStore` with different server/client snapshots (false/true), causing HTML mismatch during hydration
+- The conditional rendering `{hydrated && (...)}` for mobile menu button produced different HTML on server (nothing) vs client (button element)
+- Replaced `useHydrated` approach: removed the hook entirely and refactored admin-panel mobile menu to always render the button (hidden via md:hidden on desktop) and sidebar with consistent classes
+- Added `fmtNum()` utility in `@/lib/utils` to replace `toLocaleString()` calls — locale-dependent number formatting can produce different output on server vs client
+- Replaced all 11 `toLocaleString()` calls across marketplace.tsx, product-detail.tsx, and cart-checkout.tsx with `fmtNum()`
+- Deleted unused `use-hydrated.ts` hook file
+- Verified: lint passes with no errors, all pages return HTTP 200
+- Also confirmed: verified seller badges don't exist in codebase (only delivery verification in logistics dashboard)
+- Also confirmed: per-seller and per-logistics provider commission sections already implemented in admin panel
+
+Stage Summary:
+- Hydration error fixed by removing `useHydrated` hook and using consistent server/client rendering
+- `fmtNum()` utility replaces `toLocaleString()` for locale-independent number formatting
+- All components now render identically on server and client during initial hydration
+- No verified seller badges exist to remove (already clean)
+- Per-seller and per-logistics commission sections already present in Super Admin
