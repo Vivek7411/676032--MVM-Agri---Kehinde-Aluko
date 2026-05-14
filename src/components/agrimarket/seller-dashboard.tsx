@@ -439,7 +439,6 @@ export function SellerDashboardPage() {
                           <SelectItem value="corn">Corn</SelectItem>
                           <SelectItem value="wheat">Wheat</SelectItem>
                           <SelectItem value="rice">Rice</SelectItem>
-                          <SelectItem value="chickens">Chickens</SelectItem>
                           <SelectItem value="tomatoes">Tomatoes</SelectItem>
                         </SelectContent>
                       </Select>
