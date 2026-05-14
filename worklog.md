@@ -69,3 +69,22 @@ Stage Summary:
 - Admin tax treatment settings
 - Separate logistics payouts section
 - Simple marketplace language throughout (no tracking/API references)
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Remove Logistics from marketplace categories — it's internal only, not listed on marketplace
+
+Work Log:
+- Removed "Logistics" category from CATEGORIES array in store (was id: 'logistics', icon: 'truck', with 'Transport' subcategory and 'Road Transport' type)
+- Removed `truck` icon mapping from CATEGORY_ICONS in marketplace.tsx
+- Removed `truck` color mapping from CATEGORY_COLORS in marketplace.tsx
+- Removed unused `Truck` import from lucide-react in marketplace.tsx
+- Verified no logistics products exist in PRODUCTS array (none were using category 'logistics')
+- Kept Logistics Dashboard as an internal nav pill — accessible to demo the internal tool, but not browseable as a marketplace category
+- Lint passes cleanly, app compiles without errors
+
+Stage Summary:
+- Logistics is no longer listed as a marketplace category (removed from browse/filter/hierarchy)
+- Logistics Dashboard remains accessible via the nav pill as an internal management tool
+- Marketplace now shows 3 categories: Produce, Livestock, Warehouse

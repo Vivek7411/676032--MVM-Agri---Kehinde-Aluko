@@ -137,20 +137,7 @@ export const CATEGORIES: Category[] = [
       },
     ],
   },
-  {
-    id: 'logistics',
-    name: 'Logistics',
-    icon: 'truck',
-    subcategories: [
-      {
-        id: 'transport',
-        name: 'Transport',
-        types: [
-          { id: 'road-transport', name: 'Road Transport' },
-        ],
-      },
-    ],
-  },
+
 ]
 
 export const LOCATIONS: LocationData[] = [

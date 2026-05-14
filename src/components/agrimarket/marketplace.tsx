@@ -19,7 +19,6 @@ import {
   TrendingUp,
   LayoutGrid,
   Warehouse,
-  Truck,
   Package,
   X,
   SlidersHorizontal,
@@ -33,7 +32,6 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   leaf: <Leaf className="h-8 w-8" />,
   fish: <Fish className="h-8 w-8" />,
   warehouse: <Warehouse className="h-8 w-8" />,
-  truck: <Truck className="h-8 w-8" />,
   package: <Package className="h-8 w-8" />,
 }
 
@@ -42,7 +40,6 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
   leaf: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
   fish: { bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-200' },
   warehouse: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
-  truck: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
   package: { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200' },
 }
 
