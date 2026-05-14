@@ -216,7 +216,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'npk-fertilizer',
-    name: 'NPK Fertilizer (50kg bags)',
+    name: 'NPK Fertilizer',
     seller: 'GreenInput Ltd.',
     sellerLocation: 'Lagos, Nigeria',
     sellerId: 'seller-d',
@@ -227,7 +227,7 @@ export const PRODUCTS: Product[] = [
     category: 'produce',
     subCategory: 'crops',
     productType: 'corn',
-    description: 'NPK 15-15-15 fertilizer suitable for a wide range of crops. Sold in 50kg bags, priced per metric tonne.',
+    description: 'NPK 15-15-15 fertilizer suitable for a wide range of crops. Priced per metric tonne, sold by weight only.',
     icon: 'package',
   },
   {
