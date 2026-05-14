@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -36,13 +37,18 @@ const THUMB_ICONS: Record<string, React.ReactNode> = {
   package: <Package className="h-5 w-5" style={{ color: '#2dd4bf' }} />,
 }
 
-export function ProductDetailPage() {
-  const selectedProduct = useAgrimarketStore((s) => s.selectedProduct)
-  const setScreen = useAgrimarketStore((s) => s.setScreen)
+interface ProductDetailPageProps {
+  onNavigate: (screen: string, extra?: Record<string, string>) => void
+  onBack: () => void
+}
+
+export function ProductDetailPage({ onNavigate, onBack }: ProductDetailPageProps) {
+  const searchParams = useSearchParams()
+  const productId = searchParams.get('id')
   const addToCart = useAgrimarketStore((s) => s.addToCart)
 
-  // Look up product by ID
-  const product = PRODUCTS.find((p) => p.id === selectedProduct) ?? PRODUCTS[0]
+  // Look up product by ID from URL
+  const product = PRODUCTS.find((p) => p.id === productId) ?? PRODUCTS[0]
 
   const defaultWeight = product.minWeight
   const [weight, setWeight] = useState<string>(String(defaultWeight))
@@ -75,14 +81,14 @@ export function ProductDetailPage() {
       subCategory: product.subCategory,
       productType: product.productType,
     })
-    setScreen('cart')
+    onNavigate('cart')
   }
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-6 space-y-6">
       {/* Back to Marketplace */}
       <button
-        onClick={() => setScreen('home')}
+        onClick={onBack}
         className="inline-flex items-center gap-2 text-sm font-medium hover:underline transition-colors"
         style={{ color: '#1D9E75' }}
       >
@@ -92,7 +98,7 @@ export function ProductDetailPage() {
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-1.5 text-xs text-gray-400">
-        <button onClick={() => setScreen('home')} className="hover:text-[#1D9E75]">Marketplace</button>
+        <button onClick={onBack} className="hover:text-[#1D9E75]">Marketplace</button>
         <span>/</span>
         <span className="text-gray-600">{categoryLabel}</span>
         <span>/</span>

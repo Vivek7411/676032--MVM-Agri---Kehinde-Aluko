@@ -49,6 +49,10 @@ const PRODUCT_ICONS: Record<string, React.ReactNode> = {
   package: <Package className="h-12 w-12 text-teal-600" />,
 }
 
+interface MarketplacePageProps {
+  onNavigate: (screen: string, extra?: Record<string, string>) => void
+}
+
 // Extracted FilterPanel as a standalone component
 function FilterPanel({
   compact = false,
@@ -280,9 +284,7 @@ function FilterPanel({
   )
 }
 
-export function MarketplacePage() {
-  const setScreen = useAgrimarketStore((state) => state.setScreen)
-  const setSelectedProduct = useAgrimarketStore((state) => state.setSelectedProduct)
+export function MarketplacePage({ onNavigate }: MarketplacePageProps) {
   const filters = useAgrimarketStore((state) => state.filters)
   const setFilters = useAgrimarketStore((state) => state.setFilters)
   const resetFilters = useAgrimarketStore((state) => state.resetFilters)
@@ -290,8 +292,7 @@ export function MarketplacePage() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
   const handleProductClick = (productId: string) => {
-    setSelectedProduct(productId)
-    setScreen('product')
+    onNavigate('product', { id: productId })
   }
 
   // Filter products based on active filters

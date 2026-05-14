@@ -1,7 +1,5 @@
 import { create } from 'zustand'
 
-export type Screen = 'home' | 'product' | 'cart' | 'seller' | 'admin' | 'logistics' | 'register'
-
 // Category hierarchy: Category → Subcategory → Product Type
 export interface ProductType {
   id: string
@@ -122,7 +120,6 @@ export const CATEGORIES: Category[] = [
       },
     ],
   },
-
 ]
 
 export const LOCATIONS: LocationData[] = [
@@ -249,7 +246,6 @@ export const PRODUCTS: Product[] = [
     description: 'High-yield hybrid corn seeds for commercial planting. Priced per metric tonne.',
     icon: 'package',
   },
-
 ]
 
 // Filter state
@@ -262,10 +258,6 @@ export interface FilterState {
 }
 
 interface AgrimarketState {
-  currentScreen: Screen
-  setScreen: (screen: Screen) => void
-  selectedProduct: string | null
-  setSelectedProduct: (productId: string | null) => void
   cartItems: CartItem[]
   addToCart: (item: CartItem) => void
   removeFromCart: (itemId: string) => void
@@ -290,10 +282,6 @@ const DEFAULT_FILTERS: FilterState = {
 }
 
 export const useAgrimarketStore = create<AgrimarketState>((set) => ({
-  currentScreen: 'home',
-  setScreen: (screen) => set({ currentScreen: screen }),
-  selectedProduct: null,
-  setSelectedProduct: (productId) => set({ selectedProduct: productId }),
   cartItems: [
     {
       id: 'premium-wheat',
