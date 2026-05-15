@@ -410,39 +410,7 @@ export function SellerDashboardPage() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="space-y-2">
-                    <div className="space-y-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="price" className="text-sm font-medium text-gray-700">
-                        Price
-                      </Label>
-                      <div className="flex gap-2">
-                        <Input
-                          id="price"
-                          type="number"
-                          placeholder="₦0"
-                          className="flex-1 border-gray-300 focus-visible:ring-[#1D9E75]"
-                        />
-                        <Select>
-                          <SelectTrigger className="w-[150px] border-gray-300">
-                            <SelectValue placeholder="Unit" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="kg">Per kg</SelectItem>
-                            <SelectItem value="metric-tonne">Per metric tonne</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="available-weight" className="text-sm font-medium text-gray-700">
-                        Available weight
-                      </Label>
-                      <div className="flex gap-2">
-                        <Input
-                          id="available-weight"
-                          type="number"
-                          placeholder="0"
+                    
                           className="flex-1 border-gray-300 focus-visible:ring-[#1D9E75]"
                         />
                         <Select>
