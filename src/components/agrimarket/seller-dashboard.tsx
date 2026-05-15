@@ -411,38 +411,7 @@ export function SellerDashboardPage() {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="subcategory" className="text-sm font-medium text-gray-700">
-                        Sub category
-                      </Label>
-                      <Select>
-                        <SelectTrigger className="w-full border-gray-300 focus:ring-[#1D9E75]">
-                          <SelectValue placeholder="Select sub category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="crops">Crops</SelectItem>
-                          <SelectItem value="vegetables">Vegetables</SelectItem>
-                          <SelectItem value="fruits">Fruits</SelectItem>
-                          <SelectItem value="poultry">Poultry</SelectItem>
-                          <SelectItem value="cattle">Cattle</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
                     <div className="space-y-2">
-                      <Label htmlFor="product-type" className="text-sm font-medium text-gray-700">
-                        Product type
-                      </Label>
-                      <Select>
-                        <SelectTrigger className="w-full border-gray-300 focus:ring-[#1D9E75]">
-                          <SelectValue placeholder="Select product type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="corn">Corn</SelectItem>
-                          <SelectItem value="wheat">Wheat</SelectItem>
-                          <SelectItem value="rice">Rice</SelectItem>
-                          <SelectItem value="tomatoes">Tomatoes</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="price" className="text-sm font-medium text-gray-700">
                         Price
