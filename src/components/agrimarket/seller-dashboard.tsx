@@ -410,7 +410,38 @@ export function SellerDashboardPage() {
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
+                    <div className="space-y-2">
+                      <Label htmlFor="price" className="text-sm font-medium text-gray-700">
+                        Price
+                      </Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="price"
+                          type="number"
+                          placeholder="₦0"
+                          className="flex-1 border-gray-300 focus-visible:ring-[#1D9E75]"
+                        />
+                        <Select>
+                          <SelectTrigger className="w-[150px] border-gray-300">
+                            <SelectValue placeholder="Unit" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="kg">Per kg</SelectItem>
+                            <SelectItem value="metric-tonne">Per metric tonne</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="available-weight" className="text-sm font-medium text-gray-700">
+                        Available weight
+                      </Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="available-weight"
+                          type="number"
+                          placeholder="0"
                           className="flex-1 border-gray-300 focus-visible:ring-[#1D9E75]"
                         />
                         <Select>
@@ -466,18 +497,6 @@ export function SellerDashboardPage() {
                         <Upload className="h-6 w-6" />
                         <p className="text-sm font-medium">Drag & drop images</p>
                         <p className="text-xs">or click to browse</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Document Upload */}
-                  <div className="mt-4">
-                    <Label className="text-sm font-medium text-gray-700 mb-2 block">Product documents</Label>
-                    <p className="text-xs text-gray-400 mb-2">Upload certificates, lab results, or quality reports (optional)</p>
-                    <div className="flex h-20 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-[#1D9E75] hover:bg-[#E1F5EE]/30">
-                      <div className="flex flex-col items-center gap-1 text-gray-400">
-                        <Upload className="h-5 w-5" />
-                        <p className="text-xs font-medium">Upload documents</p>
                       </div>
                     </div>
                   </div>
